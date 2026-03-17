@@ -14,23 +14,27 @@ import Footer from "@/components/Footer";
 import { categories } from "@/data/categories";
 import { getNewArrivals } from "@/data/products";
 import { testimonials } from "@/data/testimonials";
+import EthosSection from "@/components/EthosSection";
+import VisitUs from "@/components/VisitUs";
 
 const Index = () => {
-  const featuredCategories = categories.filter(c => c.featured);
+  const featuredCategories = categories.filter((c) => c.featured);
   const newArrivals = getNewArrivals();
 
   return (
     <div className="min-h-screen flex flex-col">
-      <AnnouncementBar />
+      {/* <AnnouncementBar /> */}
       <Header />
       <main>
         <HeroSection />
+        <EthosSection />
         <CategoryGrid categories={featuredCategories} />
-        <ProductCarousel products={newArrivals} />
+        {/* <ProductCarousel products={newArrivals} /> */}
         <ServicesGrid />
         <WhyChooseSection />
         <AboutPreview />
         <InstagramReels />
+        <VisitUs />
         <TestimonialsSection testimonials={testimonials} />
         <CTABanner />
       </main>
