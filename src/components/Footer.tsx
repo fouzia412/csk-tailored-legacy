@@ -3,7 +3,7 @@ import { MapPin, Phone, Clock } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="bg-muted border-t border-border sticky top-[40vh] z-10 inset-0 h-[60vh]">
+    <footer className="bg-muted border-t border-border sticky md:top-[40vh] top-[10vh] z-10 inset-0 md:h-[60vh] h-[90vh]">
       <div className="container mx-auto px-4 py-12">
         {/* GRID */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-center justify-center w-[80%] mx-auto">
