@@ -7,7 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const AboutPreview = () => {
+const AboutPreview = ({ scrollYProgress }) => {
   const sectionRef = useRef(null);
   const headingRef = useRef(null);
 
@@ -30,7 +30,10 @@ const AboutPreview = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-16 md:py-20 overflow-hidden">
+    <section
+      ref={sectionRef}
+      className="py-16 md:py-20 overflow-hidden h-screen bg-[#fff] relative z-10"
+    >
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="order-2 md:order-1">

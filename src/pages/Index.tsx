@@ -16,10 +16,18 @@ import { getNewArrivals } from "@/data/products";
 import { testimonials } from "@/data/testimonials";
 import EthosSection from "@/components/EthosSection";
 import VisitUs from "@/components/VisitUs";
+import { useScroll } from "framer-motion";
+import { useRef } from "react";
 
 const Index = () => {
   const featuredCategories = categories.filter((c) => c.featured);
   const newArrivals = getNewArrivals();
+  const chooseRef = useRef(null);
+
+  const { scrollYProgress } = useScroll({
+    target: chooseRef,
+    offset: ["start start", "end end"],
+  });
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -31,14 +39,18 @@ const Index = () => {
         <CategoryGrid categories={featuredCategories} />
         {/* <ProductCarousel products={newArrivals} /> */}
         <ServicesGrid />
-        <WhyChooseSection />
-        <AboutPreview />
+        <div ref={chooseRef} className="h-[200vh]">
+          <WhyChooseSection scrollYProgress={scrollYProgress} />
+          <AboutPreview scrollYProgress={scrollYProgress} />
+        </div>
         <InstagramReels />
         <VisitUs />
         <TestimonialsSection testimonials={testimonials} />
-        <CTABanner />
+        <div className="h-[150vh] relative z-30">
+          <CTABanner />
+          <Footer />
+        </div>
       </main>
-      <Footer />
     </div>
   );
 };

@@ -30,7 +30,7 @@ const features = [
   },
 ];
 
-const WhyChooseSection = () => {
+const WhyChooseSection = ({ scrollYProgress }) => {
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
 
@@ -44,7 +44,7 @@ const WhyChooseSection = () => {
         scrollTrigger: {
           trigger: titleRef.current,
           start: "top 90%",
-          toggleActions: "play reverse play reverse",
+          toggleActions: "play none none play",
         },
       });
     }, sectionRef);
@@ -55,7 +55,7 @@ const WhyChooseSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="py-16 md:py-24 bg-gradient-to-b from-background to-muted/20"
+      className="py-16 md:py-24 bg-gradient-to-b from-background to-muted/20 h-screen sticky top-0 z-5"
     >
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">

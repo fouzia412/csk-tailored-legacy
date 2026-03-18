@@ -65,7 +65,7 @@ const CategoryGrid = ({ categories }) => {
   return (
     <section
       ref={sectionRef}
-      className="h-screen flex items-center justify-center overflow-hidden bg-background"
+      className="h-screen flex items-center justify-center overflow-hidden"
     >
       <div className="relative w-full max-w-7xl h-full flex items-start justify-between px-6 pt-10">
         <div ref={leftRef} className="space-y-10 w-72">

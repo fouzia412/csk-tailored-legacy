@@ -21,9 +21,9 @@ const CTABanner = () => {
   return (
     <section
       ref={targetRef}
-      className="relative py-24 md:py-32 overflow-hidden bg-transparent"
+      className="py-16 md:py-24 overflow-hidden absolute inset-0 z-20 bg-white h-[90vh]"
     >
-      <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 items-center gap-8">
+      <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 items-center gap-8 h-full">
         {/* Left Floating Card - Slides from Left */}
         <motion.div
           initial={{ x: -150, opacity: 0 }}
