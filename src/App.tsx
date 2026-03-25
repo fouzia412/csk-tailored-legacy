@@ -9,10 +9,14 @@ import Contact from "./pages/Contact";
 import CollectionSuiting from "./pages/CollectionSuiting";
 import CollectionShirting from "./pages/CollectionShirting";
 import CollectionWedding from "./pages/CollectionWedding";
+import ProductDetails from "./pages/ProductDetails";
+import Customize from "./pages/Customize";
+import Gallery from "./pages/Gallery";
 import NotFound from "./pages/NotFound";
 import { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -31,7 +35,13 @@ const App = () => {
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
+        <BrowserRouter 
+          future={{ 
+            v7_startTransition: true,
+            v7_relativeSplatPath: true 
+          }}
+        >
+          <ScrollToTop />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/about" element={<About />} />
@@ -48,6 +58,9 @@ const App = () => {
               path="/collections/wedding-sherwani"
               element={<CollectionWedding />}
             />
+            <Route path="/product/:id" element={<ProductDetails />} />
+            <Route path="/customize" element={<Customize />} />
+            <Route path="/gallery" element={<Gallery />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

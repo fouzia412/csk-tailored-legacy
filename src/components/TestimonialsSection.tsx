@@ -23,9 +23,9 @@ const TestimonialsSection = ({ testimonials }: TestimonialsSectionProps) => {
           className="text-center mb-12"
         >
           <h2 className="text-3xl md:text-4xl font-display text-foreground mb-4">
-            What Our Clients Say
+            Client Stories
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-sm md:text-base max-w-2xl mx-auto">
             Trusted by men across Hyderabad for quality and service
           </p>
         </div>

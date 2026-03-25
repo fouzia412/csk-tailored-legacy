@@ -3,6 +3,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Card, CardContent } from "@/components/ui/card";
 import { Scissors, Users, TrendingUp, Award, Clock, Shirt } from "lucide-react";
+import { useMediaQuery } from "react-responsive";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -52,7 +53,11 @@ const ServicesGrid = () => {
   const cardsRef = useRef(null);
   const introRef = useRef(null);
 
+  const isMobile = useMediaQuery({ maxWidth: 767 });
+
   useLayoutEffect(() => {
+    if (isMobile) return;
+
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -104,8 +109,49 @@ const ServicesGrid = () => {
     });
 
     return () => ctx.revert();
-  }, []);
+  }, [isMobile]);
 
+  // ================= MOBILE LAYOUT =================
+  if (isMobile) {
+    return (
+      <section className="py-16 px-6 bg-background">
+        <div className="max-w-6xl mx-auto space-y-8">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-display font-bold mb-3">Our Services</h2>
+            <p className="text-muted-foreground text-sm max-w-xs mx-auto">
+              From bespoke tailoring to expert consultations, we provide a complete textile experience.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            {services.map((service, index) => {
+              const Icon = service.icon;
+              return (
+                <Card
+                  key={index}
+                  className="bg-background border-border/50 shadow-lg"
+                >
+                  <CardContent className="p-4">
+                    <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10 mb-3">
+                      <Icon className="h-5 w-5 text-primary" />
+                    </div>
+                    <h3 className="font-display font-semibold text-sm text-foreground mb-1">
+                      {service.title}
+                    </h3>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      {service.description}
+                    </p>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // ================= DESKTOP LAYOUT (UNCHANGED) =================
   return (
     <section
       ref={containerRef}

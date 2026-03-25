@@ -18,6 +18,18 @@ const HeroSection = () => {
   const btnRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
+    // Skip scroll-linked animations on mobile for better UX
+    const isMobile = window.innerWidth < 768;
+    
+    if (isMobile) {
+      // Basic entry animation for mobile instead of scroll-linked
+      gsap.from(line1Ref.current, { y: 30, opacity: 0, delay: 0.2 });
+      gsap.from(line2Ref.current, { y: 30, opacity: 0, delay: 0.4 });
+      gsap.from(pRef.current, { y: 20, opacity: 0, delay: 0.6 });
+      gsap.from(btnRef.current, { y: 20, opacity: 0, delay: 0.8 });
+      return;
+    }
+
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: bgRef.current,

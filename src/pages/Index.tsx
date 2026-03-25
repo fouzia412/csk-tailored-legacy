@@ -34,7 +34,7 @@ const Index = () => {
       {/* <AnnouncementBar /> */}
       <Header />
       <main>
-        <div className="relative md:h-[200dvh] z-30">
+        <div className="relative h-auto md:h-[200dvh] z-30">
           <HeroSection />
           <EthosSection />
         </div>
@@ -42,17 +42,19 @@ const Index = () => {
         {/* <ProductCarousel products={newArrivals} /> */}
         <ServicesGrid />
         <TestimonialsSection testimonials={testimonials} />
-        <div ref={chooseRef} className="md:h-[200vh]">
+        <div ref={chooseRef} className="h-auto md:h-[200vh]">
           <WhyChooseSection />
           <AboutPreview />
         </div>
         {/* <InstagramReels /> */}
         <VisitUs />
-        <div className="md:h-[160vh] relative z-30">
+        <CTABanner />
+        {/* <div className="h-auto md:h-[160vh] relative z-30">
           <CTABanner />
-          <Footer />
-        </div>
+          <Footer variant="sticky" />
+        </div> */}
       </main>
+      <Footer />
     </div>
   );
 };

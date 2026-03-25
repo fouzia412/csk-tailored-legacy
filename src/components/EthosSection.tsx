@@ -33,7 +33,7 @@ const EthosSection: React.FC = () => {
   return (
     <section
       ref={sectionRef}
-      className="w-full py-20 px-6 md:px-10 absolute min-h-screen md:h-[100dvh] bg-[#fbf9f6]"
+      className="w-full py-16 px-6 md:px-10 relative md:absolute min-h-screen md:h-[100dvh] bg-[#fbf9f6] z-10"
     >
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
         {/* LEFT CONTENT */}

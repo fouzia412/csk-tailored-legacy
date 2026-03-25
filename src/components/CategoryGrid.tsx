@@ -64,18 +64,27 @@ const CategoryGrid = ({ categories }) => {
     return () => ctx.revert();
   }, [categories, isMobile]);
 
-  const left = categories.slice(0, 3);
-  const right = categories.slice(3, 6);
+  const mid = Math.ceil(categories.length / 2);
+  const left = categories.slice(0, mid);
+  const right = categories.slice(mid);
 
   // ================= MOBILE LAYOUT =================
 
   if (isMobile) {
     return (
-      <section className="py-16 px-6">
+      <section
+        className="py-16 px-6 "
+        style={{
+          backgroundImage: "url('/images/21519.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
         <div className="max-w-6xl mx-auto space-y-10">
           {/* TITLE */}
           <div className="text-center">
-            <h2 className="text-3xl font-bold mb-4">Our Strengths</h2>
+            <h2 className="text-3xl font-bold mb-4">Our collections </h2>
             <p className="text-muted-foreground">
               Why customers choose us. Technology depth and unmatched
               flexibility.
@@ -83,8 +92,8 @@ const CategoryGrid = ({ categories }) => {
           </div>
 
           {/* CARDS */}
-          {[...left, ...right].map((c) => (
-            <Link key={c.id} to={c.link} className="block">
+          {categories.slice(0, 6).map((c, index) => (
+            <Link key={`${c.id}-${index}`} to={c.link} className="block">
               <Card className="overflow-hidden">
                 <div className="aspect-square">
                   <img
@@ -118,12 +127,18 @@ const CategoryGrid = ({ categories }) => {
     <section
       ref={sectionRef}
       className="h-screen flex items-center justify-center overflow-hidden"
+      style={{
+        backgroundImage: "url('/images/21519.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
     >
       <div className="relative w-full max-w-7xl h-full flex items-start justify-between px-6 pt-10">
         {/* LEFT */}
         <div ref={leftRef} className="space-y-10 w-72">
-          {left.map((c) => (
-            <div key={c.id}>
+          {left.map((c, index) => (
+            <div key={`${c.id}-${index}`}>
               <Link to={c.link} className="group block">
                 <Card className="overflow-hidden">
                   <div className="aspect-square">
@@ -153,7 +168,7 @@ const CategoryGrid = ({ categories }) => {
         {/* CENTER */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
           <div ref={centerTextRef} className="text-center pointer-events-auto">
-            <h2 className="text-5xl font-bold mb-6">Our Strengths</h2>
+            <h2 className="text-5xl font-bold mb-6">Our collections </h2>
 
             <p className="text-lg text-muted-foreground max-w-md">
               Why customers choose us. Technology depth and unmatched
@@ -164,8 +179,8 @@ const CategoryGrid = ({ categories }) => {
 
         {/* RIGHT */}
         <div ref={rightRef} className="space-y-10 w-72 pb-10">
-          {right.map((c) => (
-            <div key={c.id}>
+          {right.map((c, index) => (
+            <div key={`${c.id}-${index}`}>
               <Link to={c.link} className="group block">
                 <Card className="overflow-hidden">
                   <div className="aspect-square">

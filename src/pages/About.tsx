@@ -1,173 +1,327 @@
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import AnnouncementBar from "@/components/AnnouncementBar";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Card, CardContent } from "@/components/ui/card";
-import { Award, Users, TrendingUp, Heart } from "lucide-react";
+import { Star } from "lucide-react";
 
 const About = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
+
   const offerings = [
     {
       title: "Premium Suiting",
-      description: "Italian wool, merino blends, and executive fabrics for corporate professionals"
+      description:
+        "Italian wool, merino blends, and executive fabrics for corporate professionals",
+      icon: Star,
     },
     {
       title: "Fine Shirting",
-      description: "Egyptian cotton, oxford weaves, and linen blends for everyday elegance"
+      description:
+        "Egyptian cotton, oxford weaves, and linen blends for everyday elegance",
+      icon: Star,
     },
     {
       title: "Wedding & Groomwear",
-      description: "Luxurious brocade, silk, and embroidered fabrics for your special day"
+      description:
+        "Luxurious brocade, silk, and embroidered fabrics for your special day",
+      icon: Star,
     },
     {
       title: "Custom Tailoring",
-      description: "Expert guidance and recommendations for bespoke garments"
-    }
+      description: "Expert guidance and recommendations for bespoke garments",
+      icon: Star,
+    },
   ];
 
-  const timeline = [
+  const editorialJourney = [
     {
       year: "1998",
-      title: "Foundation",
-      description: "Chimanlal Suresh Kumar establishes CSK Textiles in Rikabgunj, Hyderabad"
+      title: "The Vision Begins",
+      description:
+        "Chimanlal Suresh Kumar establishes CSK Textiles in the historic Rikabgunj market, bringing a new standard of luxury to Hyderabad.",
+      image: "/public/images/ethos.jpg",
     },
     {
       year: "2005",
-      title: "Wedding Specialization",
-      description: "Expanded into premium wedding and groomwear fabrics"
+      title: "A Groom's Sanctuary",
+      description:
+        "Recognizing the need for unparalleled elegance, we expanded into bespoke wedding and groomwear collections, becoming the city's preferred destination for special occasions.",
+      image: "/public/images/banner.jpg",
     },
     {
       year: "2015",
-      title: "Executive Collection",
-      description: "Launched dedicated executive suiting line for corporate professionals"
+      title: "The Executive Standard",
+      description:
+        "We launched our curated executive suiting line, partnering with international mills to bring world-class fabrics to the modern professional.",
+      image: "/public/images/aboutPreview.jpg",
     },
     {
-      year: "2023",
-      title: "Trusted Legacy",
-      description: "25+ years serving Hyderabad's discerning men with quality and expertise"
-    }
+      year: "Today",
+      title: "A Timeless Legacy",
+      description:
+        "With over 25 years of sartorial mastery, we continue to serve a community of discerning gentlemen who value quality, heritage, and the art of fine dressing.",
+      image: "/public/images/services.jpeg",
+    },
   ];
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div
+      className="min-h-screen flex flex-col bg-[#fbf9f6] text-foreground selection:bg-primary/20 overflow-x-hidden"
+      ref={containerRef}
+    >
       <AnnouncementBar />
       <Header />
-      
-      <main>
-        {/* Hero Section */}
-        <section className="py-20 bg-gradient-to-b from-muted/30 to-background">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto text-center">
-              <h1 className="text-4xl md:text-5xl font-display font-bold text-foreground mb-6">
-                Our Story
-              </h1>
-              <p className="text-lg text-muted-foreground">
-                For over 25 years, CSK Textiles has been the cornerstone of premium men's fabrics in Hyderabad's historic Rikabgunj market.
-              </p>
-            </div>
+
+      <main className="flex-grow">
+        {/* Editorial Hero Section */}
+        <section className="relative h-[70vh] md:h-[85vh] min-h-[500px] flex items-center overflow-hidden">
+          {/* Main Background Image */}
+          <div className="absolute inset-0 z-0">
+            <img
+              src="/public/images/premium-banner.png"
+              alt="Luxury Tailoring"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-black/40" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-transparent to-black/30" />
+            <div className="absolute inset-0 mesh-bg opacity-30" />
           </div>
+
+          <div className="container mx-auto px-4 relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.2, ease: "easeOut" }}
+              className="max-w-5xl mx-auto text-center"
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1 }}
+                className="mb-4 md:mb-8"
+              >
+                <span className="editorial-caps text-white/80">
+                  Established 1998
+                </span>
+              </motion.div>
+
+              <motion.h1
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 1 }}
+                className="text-4xl md:text-8xl font-display font-bold text-white mb-6 md:mb-10 leading-[1] tracking-tighter"
+              >
+                The Art of <br />
+                <span className="italic text-yellow-400 drop-shadow-2xl">
+                  Excellence
+                </span>
+              </motion.h1>
+
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6, duration: 1 }}
+                className="text-sm md:text-xl text-white/70 font-light leading-relaxed max-w-2xl mx-auto uppercase tracking-[0.2em]"
+              >
+                Twenty-Five Years of Sartorial Mastery
+              </motion.p>
+            </motion.div>
+          </div>
+
+          {/* Scroll Indicator - Hidden on Mobile */}
+          <motion.div
+            style={{ opacity: useTransform(scrollYProgress, [0, 0.1], [1, 0]) }}
+            className="absolute bottom-10 left-10 hidden md:flex flex-col items-start gap-4 z-20"
+          >
+            <div className="w-[1px] h-24 bg-gradient-to-b from-white to-transparent" />
+            <span className="text-[10px] uppercase tracking-[0.5em] text-white/50 origin-left rotate-90 translate-y-12">
+              Scroll
+            </span>
+          </motion.div>
         </section>
 
-        {/* Main Story */}
-        <section className="py-16">
+        {/* Narrative Section - The Ethos */}
+        <section className="py-16 md:py-32 relative bg-[#fbf9f6] overflow-hidden">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <div className="prose prose-lg max-w-none">
-                <p className="text-muted-foreground mb-6">
-                  Founded in 1998 by Chimanlal Suresh Kumar, our journey began with a simple vision: to provide Hyderabad's men with access to the finest fabrics from around the world. What started as a modest textile shop in Patel Market has evolved into a trusted destination for executives, grooms, and anyone who values exceptional quality in their wardrobe.
-                </p>
-                <p className="text-muted-foreground mb-6">
-                  Located in the heart of Rikabgunj, one of Hyderabad's most prestigious fabric markets, we've built our reputation on three pillars: uncompromising quality, expert knowledge, and personalized service. Every fabric in our collection is carefully curated, ensuring that whether you're selecting material for daily office wear or your wedding sherwani, you receive nothing but the best.
-                </p>
-                <p className="text-muted-foreground mb-6">
-                  Over the decades, we've witnessed fashion evolve, trends come and go, but our commitment to quality has remained constant. We take pride in being not just fabric suppliers, but trusted advisors who understand the importance of looking your best, whether in the boardroom or on your wedding day.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Timeline */}
-        <section className="py-16 bg-muted/30">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-display font-bold text-center mb-12">
-              Our Journey
-            </h2>
-            <div className="max-w-4xl mx-auto">
-              <div className="space-y-8">
-                {timeline.map((item, index) => (
-                  <div key={index} className="flex gap-6">
-                    <div className="flex-shrink-0 w-20 text-right">
-                      <span className="text-2xl font-display font-bold text-primary">
-                        {item.year}
-                      </span>
-                    </div>
-                    <div className="flex-grow">
-                      <Card className="border-border">
-                        <CardContent className="p-6">
-                          <h3 className="font-display font-semibold text-xl mb-2">
-                            {item.title}
-                          </h3>
-                          <p className="text-muted-foreground">{item.description}</p>
-                        </CardContent>
-                      </Card>
-                    </div>
+            <div className="max-w-6xl mx-auto">
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1 }}
+                className="grid lg:grid-cols-12 gap-12 md:gap-16 items-center"
+              >
+                <div className="lg:col-span-1 border-l border-primary/20 h-full hidden lg:block" />
+                <div className="lg:col-span-6">
+                  <span className="editorial-caps mb-4 md:mb-6 block">
+                    Our Ethos
+                  </span>
+                  <h2 className="editorial-heading text-3xl md:text-6xl mb-6 md:mb-8">
+                    Where Heritage Meets <br />
+                    <span className="text-yellow-400 italic">
+                      Contemporary Style
+                    </span>
+                  </h2>
+                  <div className="space-y-4 md:space-y-6 text-base md:text-lg text-muted-foreground font-light leading-relaxed">
+                    <p>
+                      CSK Textiles is more than a showroom; it is a repository
+                      of Hyderabad's sartorial heritage. Founded by Chimanlal
+                      Suresh Kumar, we have dedicated over two decades to the
+                      pursuit of the perfect fabric.
+                    </p>
+                    <p>
+                      In the bustling heart of Rikabgunj, we offer a sanctuary
+                      for the discerning gentleman. Our collection is a curated
+                      dialogue between tradition and innovation, featuring the
+                      world's most prestigious mills.
+                    </p>
                   </div>
-                ))}
-              </div>
+                </div>
+                <div className="lg:col-span-5">
+                  <div className="aspect-[3/4] rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-elegant rotate-1 md:rotate-3 max-w-md mx-auto lg:max-w-none">
+                    <img
+                      src="/public/images/choose.jpeg"
+                      alt="Fine Fabrics"
+                      className="w-full h-full object-cover grayscale"
+                    />
+                  </div>
+                </div>
+              </motion.div>
             </div>
           </div>
         </section>
 
-        {/* What We Offer */}
-        <section className="py-16">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-display font-bold text-center mb-12">
-              What We Offer
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-              {offerings.map((offering, index) => (
-                <Card key={index} className="border-border">
-                  <CardContent className="p-6">
-                    <h3 className="font-display font-semibold text-xl mb-3 text-primary">
-                      {offering.title}
+        {/* Editorial Storytelling Layout - The Journey */}
+        <section className="bg-white overflow-hidden">
+          {editorialJourney.map((step, index) => (
+            <div
+              key={index}
+              className="relative py-16 md:py-16 border-b border-muted/30 last:border-0"
+            >
+              <div className="container mx-auto px-4">
+                <div
+                  className={`flex flex-col md:flex-row items-center gap-12 md:gap-32 ${index % 2 === 0 ? "" : "md:flex-row-reverse"}`}
+                >
+                  <motion.div
+                    initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                    className="w-full md:w-1/2"
+                  >
+                    <div className="relative group overflow-visible">
+                      <div className="aspect-[4/5] rounded-tl-[3rem] md:rounded-tl-[8rem] border border-muted/50 overflow-hidden shadow-2xl relative z-10">
+                        <img
+                          src={step.image}
+                          alt={step.title}
+                          className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                        />
+                      </div>
+                      <div
+                        className={`absolute -bottom-6 md:-bottom-10 ${index % 2 === 0 ? "-right-6 md:-right-10" : "-left-6 md:-left-10"} text-6xl md:text-[10rem] font-display font-bold text-yellow-400/5 select-none z-0`}
+                      >
+                        {step.year}
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.2 }}
+                    className="w-full md:w-1/2 space-y-4 md:space-y-8"
+                  >
+                    <span className="editorial-caps text-lg">{step.year}</span>
+                    <h3 className="editorial-heading text-3xl md:text-5xl">
+                      {step.title}
                     </h3>
-                    <p className="text-muted-foreground">{offering.description}</p>
-                  </CardContent>
-                </Card>
+                    <p className="text-base md:text-xl text-muted-foreground font-light leading-relaxed italic">
+                      {step.description}
+                    </p>
+                  </motion.div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </section>
+
+        {/* What We Offer - Refined Grid */}
+        <section className="py-20 md:py-32 bg-[#fbf9f6] overflow-hidden">
+          <div className="container mx-auto px-4 text-center mb-16 md:mb-24">
+            <span className="editorial-caps mb-4 block">The Collections</span>
+            <h2 className="editorial-heading text-3xl md:text-7xl">
+              Curated <span className="text-yellow-400 italic">Selections</span>
+            </h2>
+          </div>
+
+          <div className="container mx-auto px-4 max-w-7xl">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
+              {offerings.map((offering, index) => (
+                <motion.div
+                  key={index}
+                  whileHover={{ y: -8 }}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1, duration: 0.8 }}
+                  className="group relative p-8 md:p-12 glass-card rounded-[2rem] text-center hover:bg-white transition-all duration-700 shadow-elegant"
+                >
+                  <div className="mb-6 md:mb-8 inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-full bg-slate-50 border border-muted group-hover:bg-primary group-hover:text-white transition-all duration-500">
+                    <offering.icon className="w-6 h-6 md:w-8 md:h-8" />
+                  </div>
+                  <h3 className="text-xl md:text-2xl font-display font-bold mb-3 md:mb-4">
+                    {offering.title}
+                  </h3>
+                  <p className="text-muted-foreground font-light text-xs md:text-sm leading-relaxed">
+                    {offering.description}
+                  </p>
+                </motion.div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Values */}
-        <section className="py-16 bg-gradient-to-b from-background to-muted/30">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-display font-bold text-center mb-12">
-              Our Values
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
-              {[
-                { icon: Award, title: "Quality First", desc: "Only premium fabrics" },
-                { icon: Users, title: "Expert Guidance", desc: "Personalized advice" },
-                { icon: TrendingUp, title: "Heritage", desc: "25+ years trusted" },
-                { icon: Heart, title: "Customer Focus", desc: "Your satisfaction matters" }
-              ].map((value, index) => {
-                const Icon = value.icon;
-                return (
-                  <div key={index} className="text-center">
-                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
-                      <Icon className="h-8 w-8 text-primary" />
+        {/* Values Banner */}
+        <section className="h-[60vh] relative flex items-center overflow-hidden bg-primary">
+          <div className="absolute inset-0 z-0">
+            <img
+              src="/public/images/banner.jpg"
+              className="w-full h-full object-cover opacity-20 grayscale"
+              alt="Heritage"
+            />
+          </div>
+          <div className="container mx-auto px-4 relative z-10 text-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1 }}
+            >
+              <h2 className="text-white text-3xl md:text-8xl font-display font-bold mb-8 md:mb-12 opacity-90 italic">
+                Redefining Elegance
+              </h2>
+              <div className="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-24">
+                {[
+                  { label: "Quality", value: "Premium" },
+                  { label: "Expertise", value: "Masters" },
+                  { label: "Legacy", value: "25+ Years" },
+                ].map((stat, i) => (
+                  <div key={i} className="text-center">
+                    <div className="text-white/60 editorial-caps mb-1 md:mb-2 text-[8px] md:text-[10px]">
+                      {stat.label}
                     </div>
-                    <h3 className="font-display font-semibold text-lg mb-2">{value.title}</h3>
-                    <p className="text-sm text-muted-foreground">{value.desc}</p>
+                    <div className="text-white text-lg md:text-2xl font-bold tracking-widest uppercase">
+                      {stat.value}
+                    </div>
                   </div>
-                );
-              })}
-            </div>
+                ))}
+              </div>
+            </motion.div>
           </div>
         </section>
       </main>
-      
+
       <Footer />
     </div>
   );
