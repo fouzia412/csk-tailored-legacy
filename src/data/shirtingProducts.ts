@@ -1,9 +1,8 @@
 import type { Product } from './products';
-import productShirt1 from '/images/shirts1.jpg';
-import productShirt2 from '/images/shirts2.jpg';
-import productShirt3 from '/images/shirts3.jpg';
-import productShirt4 from '/images/shirts4.jpg';
-import productShirt5 from '/images/shirts5.jpg';
+import productShirt1 from '/textures/shirts/shirts1.jpg';
+import productShirt2 from '/textures/shirts/shirts2.jpg';
+import productShirt3 from '/textures/shirts/shirts3.jpg';
+import productShirt4 from '/textures/shirts/shirts4.jpg';
 
 export const shirtingProducts: Product[] = [
   {
@@ -51,16 +50,5 @@ export const shirtingProducts: Product[] = [
     fabric: 'Cotton Blend',
     colors: ['Navy Blue'],
     tags: ['Trending', 'Smart Casual']
-  },
-  {
-    id: 'shirt-05',
-    name: 'Emerald Green Statement Shirt',
-    category: 'shirting',
-    price: 2600,
-    image: [productShirt5, productShirt1, productShirt2, productShirt3],
-    description: 'Bold designer shirt for standout party and evening wear',
-    fabric: 'Premium Cotton Blend',
-    colors: ['Emerald Green'],
-    tags: ['Party Wear', 'Trending', 'Designer']
   }
 ];
