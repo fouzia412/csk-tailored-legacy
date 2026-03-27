@@ -1,7 +1,7 @@
 
 import categorySuiting from "@/assets/suities/Men/19.jpg";
 import categoryShirting from "/images/hl-shirt.jpg";
-import categoryWedding from "/images/wedding-dress.png";
+import categoryWedding from "/textures/wedding/wedding-01.png";
 import categoryTuxedo from "/images/ethos.jpg";
 import categoryIndoWestern from "@/assets/suities/Men/5851.jpg";
 import categoryBlazers from "/images/hl4.jpg";

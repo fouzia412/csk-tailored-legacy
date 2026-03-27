@@ -19,6 +19,8 @@ export type FabricPattern =
     | "dot"
     | "birdseye"
     | "houndstooth"
+    | "matte"
+    | "print"
     | "sheen";
 
 export type MaterialItem = {
@@ -56,14 +58,38 @@ export const outfitImageAssets = {
         },
     },
     Shirt: {
-        front: null,
-        left: null,
-        right: null,
+        front: {
+            base: "/customize/shirt/front.png",
+            mask: "/customize/shirt/front-mask.png",
+            detail: "/customize/shirt/front-detail.png",
+        },
+        left: {
+            base: "/customize/shirt/left.png",
+            mask: "/customize/shirt/left-mask.png",
+            detail: "/customize/shirt/left-detail.png",
+        },
+        right: {
+            base: "/customize/shirt/right.png",
+            mask: "/customize/shirt/right-mask.png",
+            detail: "/customize/shirt/right-detail.png",
+        },
     },
     "Wedding outfit": {
-        front: null,
-        left: null,
-        right: null,
+        front: {
+            base: '/customize/wedding/front.png',
+            mask: '/customize/wedding/front-mask.png',
+            detail: '/customize/wedding/front-detail.png'
+        },
+        left: {
+            base: '/customize/wedding/left.png',
+            mask: '/customize/wedding/left-mask.png',
+            detail: '/customize/wedding/left-detail.png'
+        },
+        right: {
+            base: '/customize/wedding/right.png',
+            mask: '/customize/wedding/right-mask.png',
+            detail: '/customize/wedding/right-detail.png'
+        },
     },
 } as const;
 

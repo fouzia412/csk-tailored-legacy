@@ -28,7 +28,7 @@ import productMenSuit4_3 from '/textures/suits/suit-04-2.jpg';
 export const suitingProducts: Product[] = [
   {
     id: 'suit-01',
-    name: 'Charcoal Wedding Suit',
+    name: 'Charcoal Wedding',
     category: 'suiting',
     price: 8500,
     image: [productMenSuit1, productMenSuit1_1, productMenSuit1_2, productMenSuit1_3, productMenSuit1_4],
@@ -41,7 +41,7 @@ export const suitingProducts: Product[] = [
   },
   {
     id: 'suit-02',
-    name: 'Black & Silver Wedding Suit',
+    name: 'Black & Silver',
     category: 'suiting',
     price: 9200,
     image: [productMenSuit2, productMenSuit2_1, productMenSuit2_2, productMenSuit2_3, productMenSuit2_4, productMenSuit2_5],
@@ -54,7 +54,7 @@ export const suitingProducts: Product[] = [
   },
   {
     id: 'suit-03',
-    name: 'Navy Formal Suit',
+    name: 'Formal Navy',
     category: 'suiting',
     price: 7800,
     image: [productMenSuit3, productMenSuit3_1, productMenSuit3_2, productMenSuit3_3],
@@ -67,7 +67,7 @@ export const suitingProducts: Product[] = [
   },
   {
     id: 'suit-04',
-    name: 'Light Grey Business Suit',
+    name: 'Formal Light Grey',
     category: 'suiting',
     price: 11500,
     image: [productMenSuit4, productMenSuit4_1, productMenSuit4_2, productMenSuit4_3],

@@ -318,12 +318,6 @@ const ProductDetails = () => {
               {/* Trust Indicators */}
               <div className="flex flex-wrap gap-8 mt-12 pt-8 border-t border-black/5">
                 <div className="flex items-center gap-3">
-                  <ShieldCheck className="w-5 h-5 text-green-600" />
-                  <span className="text-[10px] uppercase tracking-widest font-medium">
-                    Lifetime Guarantee
-                  </span>
-                </div>
-                <div className="flex items-center gap-3">
                   <Ruler className="w-5 h-5 text-blue-600" />
                   <span className="text-[10px] uppercase tracking-widest font-medium">
                     Custom Fitting

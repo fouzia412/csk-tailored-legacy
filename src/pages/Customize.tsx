@@ -30,16 +30,16 @@ import suitingBanner from "@/assets/suiting.jpg";
 const Customize = () => {
   const location = useLocation();
   const passedOutfit = location.state?.outfit as OutfitType | undefined;
-  
-  const [selectedOutfit, setSelectedOutfit] = useState<OutfitType>(passedOutfit || "Suit");
+
+  const [selectedOutfit, setSelectedOutfit] = useState<OutfitType>(
+    passedOutfit || "Suit",
+  );
   const [selectedMaterialId, setSelectedMaterialId] =
     useState("suit-navy-stripe");
-  const [selectedColor, setSelectedColor] = useState("#1F2A44");
   const [selectedView, setSelectedView] = useState<ViewType>("front");
   const [zoom, setZoom] = useState(1);
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
-  const [isColorApplied, setIsColorApplied] = useState(false);
   const filteredMaterials = useMemo(() => {
     return customizeMaterials.filter((item) => {
       const matchOutfit = item.outfit === selectedOutfit;
@@ -68,16 +68,8 @@ const Customize = () => {
     );
     if (first) {
       setSelectedMaterialId(first.id);
-      setSelectedColor(first.defaultColor);
     }
   }, [selectedOutfit]);
-
-  useEffect(() => {
-    if (selectedMaterial) {
-      setSelectedColor(selectedMaterial.defaultColor);
-      setIsColorApplied(false); // 🔥 show original fabric first
-    }
-  }, [selectedMaterial?.id]);
 
   const renderSwatchBackground = (item: MaterialItem) => {
     const base = item.defaultColor;
@@ -286,7 +278,7 @@ const Customize = () => {
                   ? `url(${selectedMaterial.textureImage})`
                   : undefined,
 
-                backgroundSize: "70px", // 🔥 key
+                backgroundSize: "250px",
                 backgroundRepeat: "repeat",
                 backgroundPosition: "center",
 
@@ -302,33 +294,11 @@ const Customize = () => {
                 maskRepeat: "no-repeat",
                 maskPosition: "center",
 
-                mixBlendMode: "normal",
+                mixBlendMode: "multiply",
+                filter: "blur(0.5px)",
                 opacity: 1,
               }}
             />
-
-            {/* Color Tint Layer */}
-            {isColorApplied && (
-              <div
-                className="absolute inset-0"
-                style={{
-                  backgroundColor: selectedColor,
-
-                  mixBlendMode: "multiply",
-                  opacity: 0.5,
-
-                  WebkitMaskImage: `url(${assets.mask})`,
-                  WebkitMaskSize: "contain",
-                  WebkitMaskRepeat: "no-repeat",
-                  WebkitMaskPosition: "center",
-
-                  maskImage: `url(${assets.mask})`,
-                  maskSize: "contain",
-                  maskRepeat: "no-repeat",
-                  maskPosition: "center",
-                }}
-              />
-            )}
 
             {/* Highlight layer */}
             <div
@@ -375,7 +345,7 @@ const Customize = () => {
     <div className="min-h-screen bg-white text-[#111827]">
       <Header />
       <div>
-        <section className="relative h-[70vh] overflow-hidden">
+        <section className="relative py-28 overflow-hidden">
           <motion.div
             initial={{ scale: 1.1 }}
             animate={{ scale: 1 }}
@@ -387,7 +357,7 @@ const Customize = () => {
               alt="Premium Suiting"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-black/50" />
+            <div className="absolute inset-0 bg-black/30" />
           </motion.div>
 
           <div className="relative h-full container mx-auto px-4 flex flex-col justify-center items-center text-center">
@@ -396,13 +366,13 @@ const Customize = () => {
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.5, duration: 0.8 }}
             >
-              <span className="inline-block px-4 py-1 border border-white/20 rounded-full text-[10px] font-medium tracking-[0.3em] uppercase mb-4 backdrop-blur-md">
+              <span className="inline-block px-4 py-1 border border-white/20 rounded-full text-[10px] font-medium tracking-[0.3em] uppercase  backdrop-blur-md">
                 Noble Weaves
               </span>
-              <h1 className="text-6xl md:text-8xl font-display font-medium mb-6 tracking-tight">
+              <h1 className="text-xl md:text-5xl font-display text-white font-medium my-3 tracking-tight">
                 Customize <span className="italic font-light">Clothing</span>
               </h1>
-              <p className="max-w-xl mx-auto text-lg text-white/60 font-light leading-relaxed mb-8">
+              <p className="max-w-xl mx-auto text-lg text-white/60 font-light leading-relaxed ">
                 Design your perfect outfit with our premium selection of fabrics
                 and styles.
               </p>
@@ -421,7 +391,7 @@ const Customize = () => {
         </div>
         <div className="grid min-h-[calc(100vh-80px)] grid-cols-1 xl:grid-cols-[380px_1fr_320px]">
           {/* LEFT */}
-          <aside className="border-b border-[#E5E7EB] bg-[#FAFAFA] xl:border-b-0 xl:border-r">
+          <aside className="order-2 border-b border-[#E5E7EB] bg-[#FAFAFA] xl:order-1 xl:border-b-0 xl:border-r">
             <div className="h-full p-5 lg:p-6">
               <div className="mb-5 flex flex-col gap-3 sm:flex-row">
                 <div className="relative flex-1">
@@ -457,7 +427,6 @@ const Customize = () => {
                     key={item.id}
                     onClick={() => {
                       setSelectedMaterialId(item.id);
-                      setSelectedColor(item.defaultColor);
                     }}
                     className={`rounded-2xl border p-2 text-left transition ${
                       selectedMaterialId === item.id
@@ -471,8 +440,8 @@ const Customize = () => {
                         backgroundImage: item.textureImage
                           ? `url(${item.textureImage})`
                           : undefined,
-                        backgroundSize: "120px",
-                        backgroundRepeat: "repeat",
+                        backgroundSize: "cover",
+                        backgroundRepeat: "no-repeat",
                         backgroundPosition: "center",
                       }}
                     />
@@ -492,7 +461,7 @@ const Customize = () => {
           </aside>
 
           {/* CENTER */}
-          <main className="relative flex flex-col items-center justify-center bg-[#F8F8F7] px-4 py-8 md:px-8">
+          <main className="order-1 relative flex flex-col items-center justify-center bg-[#F8F8F7] px-4 py-8 md:px-8 xl:order-2">
             <div className="mb-6 flex w-full max-w-5xl items-center justify-between">
               <div>
                 <p className="text-xs uppercase tracking-[0.25em] text-[#6B7280]">
@@ -519,7 +488,7 @@ const Customize = () => {
                 <div className="relative aspect-[4/5] overflow-hidden rounded-[28px] bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.05),transparent_60%)]">
                   <AnimatePresence mode="wait">
                     <motion.div
-                      key={`${selectedMaterialId}-${selectedColor}-${selectedView}`}
+                      key={`${selectedMaterialId}-${selectedView}`}
                       initial={{ opacity: 0, scale: 0.98, y: 10 }}
                       animate={{ opacity: 1, scale: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 1.02, y: -10 }}
@@ -536,7 +505,7 @@ const Customize = () => {
           </main>
 
           {/* RIGHT */}
-          <aside className="border-t border-[#E5E7EB] bg-white xl:border-l xl:border-t-0">
+          <aside className="order-3 border-t border-[#E5E7EB] bg-white xl:border-l xl:border-t-0">
             <div className="p-6">
               <p className="text-xs uppercase tracking-[0.25em] text-[#6B7280]">
                 Your Selection
@@ -558,29 +527,6 @@ const Customize = () => {
                 <p className="text-sm text-[#6B7280]">
                   {selectedMaterial?.family} · {selectedMaterial?.subLabel}
                 </p>
-              </div>
-
-              <div className="mt-8">
-                <p className="mb-3 text-sm font-medium text-[#374151]">
-                  Available colors
-                </p>
-                <div className="flex flex-wrap gap-3">
-                  {selectedMaterial?.colors.map((color) => (
-                    <button
-                      key={color}
-                      onClick={() => {
-                        setSelectedColor(color);
-                        setIsColorApplied(true); // 🔥 THIS WAS MISSING
-                      }}
-                      className={`h-10 w-10 rounded-full border-2 transition ${
-                        selectedColor === color
-                          ? "scale-110 border-[#111827]"
-                          : "border-[#E5E7EB]"
-                      }`}
-                      style={{ backgroundColor: color }}
-                    />
-                  ))}
-                </div>
               </div>
 
               <div className="mt-8">
