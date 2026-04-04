@@ -94,25 +94,28 @@ const CategoryGrid = ({ categories }) => {
           {/* CARDS */}
           {categories.slice(0, 6).map((c, index) => (
             <Link key={`${c.id}-${index}`} to={c.link} className="block">
-              <Card className="overflow-hidden">
-                <div className="aspect-square">
+              <Card className="overflow-hidden rounded-2xl shadow-md">
+                <div className="relative w-full h-[320px] bg-white flex items-center justify-center">
+                  {/* IMAGE */}
                   <img
                     src={c.image}
                     alt={c.name}
-                    className="w-full h-full object-cover"
+                    className="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-105"
                   />
+
+                  {/* OVERLAY */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+                  {/* TEXT */}
+                  <div className="absolute bottom-0 left-0 w-full p-4 text-white">
+                    <h3 className="text-lg font-semibold flex justify-between items-center">
+                      {c.name}
+                      <ArrowRight className="h-4 w-4" />
+                    </h3>
+
+                    <p className="text-sm text-white/80">{c.description}</p>
+                  </div>
                 </div>
-
-                <CardContent className="p-4">
-                  <h3 className="text-lg font-semibold flex justify-between">
-                    {c.name}
-                    <ArrowRight className="h-4 w-4" />
-                  </h3>
-
-                  <p className="text-sm text-muted-foreground">
-                    {c.description}
-                  </p>
-                </CardContent>
               </Card>
             </Link>
           ))}
@@ -140,25 +143,30 @@ const CategoryGrid = ({ categories }) => {
           {left.map((c, index) => (
             <div key={`${c.id}-${index}`}>
               <Link to={c.link} className="group block">
-                <Card className="overflow-hidden">
-                  <div className="aspect-square">
+                <Card className="overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all duration-500">
+                  <div className="relative w-full h-[420px] overflow-hidden">
+                    {/* IMAGE */}
                     <img
                       src={c.image}
                       alt={c.name}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                     />
+
+                    {/* GRADIENT */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+                    {/* TEXT */}
+                    <div className="absolute bottom-0 left-0 w-full p-5 text-white">
+                      <h3 className="text-lg font-semibold flex justify-between items-center">
+                        {c.name}
+                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition" />
+                      </h3>
+
+                      <p className="text-sm text-white/80 mt-1">
+                        {c.description}
+                      </p>
+                    </div>
                   </div>
-
-                  <CardContent className="p-6">
-                    <h3 className="text-xl font-semibold flex justify-between">
-                      {c.name}
-                      <ArrowRight className="h-5 w-5" />
-                    </h3>
-
-                    <p className="text-sm text-muted-foreground">
-                      {c.description}
-                    </p>
-                  </CardContent>
                 </Card>
               </Link>
             </div>
@@ -182,25 +190,30 @@ const CategoryGrid = ({ categories }) => {
           {right.map((c, index) => (
             <div key={`${c.id}-${index}`}>
               <Link to={c.link} className="group block">
-                <Card className="overflow-hidden">
-                  <div className="aspect-square">
+                <Card className="overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all duration-500">
+                  <div className="relative w-full h-[420px] overflow-hidden">
+                    {/* IMAGE */}
                     <img
                       src={c.image}
                       alt={c.name}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                     />
+
+                    {/* GRADIENT */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+                    {/* TEXT */}
+                    <div className="absolute bottom-0 left-0 w-full p-5 text-white">
+                      <h3 className="text-lg font-semibold flex justify-between items-center">
+                        {c.name}
+                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition" />
+                      </h3>
+
+                      <p className="text-sm text-white/80 mt-1">
+                        {c.description}
+                      </p>
+                    </div>
                   </div>
-
-                  <CardContent className="p-6">
-                    <h3 className="text-xl font-semibold flex justify-between">
-                      {c.name}
-                      <ArrowRight className="h-5 w-5" />
-                    </h3>
-
-                    <p className="text-sm text-muted-foreground">
-                      {c.description}
-                    </p>
-                  </CardContent>
                 </Card>
               </Link>
             </div>

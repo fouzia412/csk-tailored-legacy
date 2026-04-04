@@ -11,17 +11,15 @@ const Footer = ({ variant = "static" }: FooterProps) => {
   return (
     <footer
       className={`bg-muted border-t border-border z-10 ${
-        isSticky ? "md:sticky md:top-[40vh] md:inset-0 md:h-[60vh]" : ""
+        isSticky ? "md:sticky md:top-[40vh] md:h-[60vh]" : ""
       }`}
     >
       <div className="container mx-auto px-6 pt-10 pb-4">
         {/* GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-8 items-start justify-center w-full md:w-[90%] lg:w-[80%] mx-auto">
-          {/* Logo + Brand */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-8 items-start w-full md:w-[90%] lg:w-[80%] mx-auto">
+          {/* Logo */}
           <div className="flex flex-col items-center md:items-start text-center md:text-left">
-            <div className="mb-6 mx-auto">
-              <img src="/images/logo.png" className="w-32 md:w-40" />
-            </div>
+            <img src="/images/logo.png" className="w-32 md:w-40 mb-6" />
 
             <h3 className="text-xl md:text-2xl font-display font-bold text-primary mb-4">
               CSK Textiles Hyderabad
@@ -34,7 +32,7 @@ const Footer = ({ variant = "static" }: FooterProps) => {
             </p>
           </div>
 
-          {/* Quick Links */}
+          {/* Links */}
           <div className="flex flex-col items-center md:items-start text-center md:text-left">
             <h4 className="font-semibold text-foreground text-2xl md:text-3xl mb-6">
               Quick Links
@@ -44,43 +42,39 @@ const Footer = ({ variant = "static" }: FooterProps) => {
               <li>
                 <Link
                   to="/collections/suiting"
-                  className="text-muted-foreground hover:text-primary transition-colors"
+                  className="text-muted-foreground hover:text-primary transition"
                 >
                   Suiting Collection
                 </Link>
               </li>
-
               <li>
                 <Link
                   to="/collections/shirting"
-                  className="text-muted-foreground hover:text-primary transition-colors"
+                  className="text-muted-foreground hover:text-primary transition"
                 >
                   Shirting Collection
                 </Link>
               </li>
-
               <li>
                 <Link
                   to="/collections/wedding"
-                  className="text-muted-foreground hover:text-primary transition-colors"
+                  className="text-muted-foreground hover:text-primary transition"
                 >
                   Wedding & Sherwani
                 </Link>
               </li>
-
               <li>
                 <Link
                   to="/about"
-                  className="text-muted-foreground hover:text-primary transition-colors"
+                  className="text-muted-foreground hover:text-primary transition"
                 >
                   About Us
                 </Link>
               </li>
-
               <li>
                 <Link
                   to="/contact"
-                  className="text-muted-foreground hover:text-primary transition-colors"
+                  className="text-muted-foreground hover:text-primary transition"
                 >
                   Contact
                 </Link>
@@ -88,7 +82,7 @@ const Footer = ({ variant = "static" }: FooterProps) => {
             </ul>
           </div>
 
-          {/* Store Info */}
+          {/* Visit */}
           <div className="flex flex-col items-center md:items-start text-center md:text-left">
             <h4 className="font-semibold text-foreground text-2xl md:text-3xl mb-6">
               Visit Us
@@ -106,7 +100,7 @@ const Footer = ({ variant = "static" }: FooterProps) => {
 
               <li className="flex items-center gap-3 justify-center md:justify-start">
                 <Phone className="h-5 w-5 text-primary shrink-0" />
-                <span> +91 4024567139 | +91 9030609700</span>
+                <span>+91 4024567139 | +91 9030609700</span>
               </li>
 
               <li className="flex items-start gap-3 justify-center md:justify-start">
@@ -119,20 +113,20 @@ const Footer = ({ variant = "static" }: FooterProps) => {
               </li>
             </ul>
           </div>
-          <div className="flex gap-4 text-sm text-gray-500">
-            <Link to="/terms" className="hover:text-black transition">
-              Terms & Conditions
-            </Link>
-            <Link to="/privacy" className="hover:text-black transition">
-              Privacy Policy
-            </Link>
-          </div>
-          {/* Empty / extra column for spacing (optional like awwwards style) */}
-          <div className="hidden lg:block" />
+        </div>
+
+        {/* ✅ Terms moved OUTSIDE grid */}
+        <div className="mt-10 flex flex-col md:flex-row items-center justify-center md:justify-start gap-4 text-sm text-muted-foreground w-full md:w-[90%] lg:w-[80%] mx-auto">
+          <Link to="/terms" className="hover:text-primary transition">
+            Terms & Conditions
+          </Link>
+          <Link to="/privacy" className="hover:text-primary transition">
+            Privacy Policy
+          </Link>
         </div>
 
         {/* Bottom */}
-        <div className="border-t border-border  pt-4 text-center text-sm text-muted-foreground">
+        <div className="border-t border-border mt-6 pt-4 text-center text-sm text-muted-foreground">
           © {new Date().getFullYear()} Chimanlal Suresh Kumar Textiles Pvt Ltd.
           All rights reserved.
           <br className="md:hidden" />
