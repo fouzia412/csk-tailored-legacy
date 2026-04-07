@@ -50,7 +50,7 @@ export const weddingProducts: Product[] = [
     description: 'Elegant cream sherwani with traditional detailing',
     fabric: 'Silk',
     colors: ['Cream', 'Gold'],
-    tags: ['Wedding', 'Festival', 'Premium']
+    tags: ['Wedding', 'Festival']
   },
   {
     id: 'wedding-02',
@@ -73,7 +73,7 @@ export const weddingProducts: Product[] = [
     description: 'Classic ivory sherwani with fine embroidery work',
     fabric: 'Embroidered',
     colors: ['Ivory', 'Off White'],
-    tags: ['Wedding', 'Premium']
+    tags: ['Wedding']
   },
   {
     id: 'wedding-04',

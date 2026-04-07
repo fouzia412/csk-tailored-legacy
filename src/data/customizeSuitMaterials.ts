@@ -1,17 +1,7 @@
 import type { MaterialItem } from './CustomizeMaterials';
 
 export const customizeSuitMaterials: MaterialItem[] = [
-    {
-        id: "f1",
-        outfit: "Suit",
-        name: "Sky Stripe Linen",
-        family: "Linen",
-        subLabel: "Summer Stripe",
-        defaultColor: "#9FB7D3",
-        colors: ["#9FB7D3", "#6F8FB5", "#C9D7E8"],
-        textureImage: "/customize/suit/Fabric/f1.jpg",
-        lightweight: true,
-    },
+
     {
         id: "f2",
         outfit: "Suit",
@@ -214,5 +204,16 @@ export const customizeSuitMaterials: MaterialItem[] = [
         colors: ["#3FA7A3", "#2C7C79", "#66C2BE"],
         textureImage: "/customize/suit/Fabric/f20.jpg",
         lightweight: true,
-    }
+    },
+    {
+        id: "f1",
+        outfit: "Suit",
+        name: "Sky Stripe Linen",
+        family: "Linen",
+        subLabel: "Summer Stripe",
+        defaultColor: "#9FB7D3",
+        colors: ["#9FB7D3", "#6F8FB5", "#C9D7E8"],
+        textureImage: "/customize/suit/Fabric/f1.jpg",
+        lightweight: true,
+    },
 ];
