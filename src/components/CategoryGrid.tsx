@@ -64,18 +64,27 @@ const CategoryGrid = ({ categories }) => {
     return () => ctx.revert();
   }, [categories, isMobile]);
 
-  const left = categories.slice(0, 3);
-  const right = categories.slice(3, 6);
+  const mid = Math.ceil(categories.length / 2);
+  const left = categories.slice(0, mid);
+  const right = categories.slice(mid);
 
   // ================= MOBILE LAYOUT =================
 
   if (isMobile) {
     return (
-      <section className="py-16 px-6">
+      <section
+        className="py-16 px-6 "
+        style={{
+          backgroundImage: "url('/images/21519.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
         <div className="max-w-6xl mx-auto space-y-10">
           {/* TITLE */}
           <div className="text-center">
-            <h2 className="text-3xl font-bold mb-4">Our Strengths</h2>
+            <h2 className="text-3xl font-bold mb-4">Our collections </h2>
             <p className="text-muted-foreground">
               Why customers choose us. Technology depth and unmatched
               flexibility.
@@ -83,27 +92,30 @@ const CategoryGrid = ({ categories }) => {
           </div>
 
           {/* CARDS */}
-          {[...left, ...right].map((c) => (
-            <Link key={c.id} to={c.link} className="block">
-              <Card className="overflow-hidden">
-                <div className="aspect-square">
+          {categories.slice(0, 6).map((c, index) => (
+            <Link key={`${c.id}-${index}`} to={c.link} className="block">
+              <Card className="overflow-hidden rounded-2xl shadow-md">
+                <div className="relative w-full h-[320px] bg-white flex items-center justify-center">
+                  {/* IMAGE */}
                   <img
                     src={c.image}
                     alt={c.name}
-                    className="w-full h-full object-cover"
+                    className="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-105"
                   />
+
+                  {/* OVERLAY */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+                  {/* TEXT */}
+                  <div className="absolute bottom-0 left-0 w-full p-4 text-white">
+                    <h3 className="text-lg font-semibold flex justify-between items-center">
+                      {c.name}
+                      <ArrowRight className="h-4 w-4" />
+                    </h3>
+
+                    <p className="text-sm text-white/80">{c.description}</p>
+                  </div>
                 </div>
-
-                <CardContent className="p-4">
-                  <h3 className="text-lg font-semibold flex justify-between">
-                    {c.name}
-                    <ArrowRight className="h-4 w-4" />
-                  </h3>
-
-                  <p className="text-sm text-muted-foreground">
-                    {c.description}
-                  </p>
-                </CardContent>
               </Card>
             </Link>
           ))}
@@ -118,32 +130,43 @@ const CategoryGrid = ({ categories }) => {
     <section
       ref={sectionRef}
       className="h-screen flex items-center justify-center overflow-hidden"
+      style={{
+        backgroundImage: "url('/images/21519.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
     >
       <div className="relative w-full max-w-7xl h-full flex items-start justify-between px-6 pt-10">
         {/* LEFT */}
         <div ref={leftRef} className="space-y-10 w-72">
-          {left.map((c) => (
-            <div key={c.id}>
+          {left.map((c, index) => (
+            <div key={`${c.id}-${index}`}>
               <Link to={c.link} className="group block">
-                <Card className="overflow-hidden">
-                  <div className="aspect-square">
+                <Card className="overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all duration-500">
+                  <div className="relative w-full h-[420px] overflow-hidden">
+                    {/* IMAGE */}
                     <img
                       src={c.image}
                       alt={c.name}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                     />
+
+                    {/* GRADIENT */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+                    {/* TEXT */}
+                    <div className="absolute bottom-0 left-0 w-full p-5 text-white">
+                      <h3 className="text-lg font-semibold flex justify-between items-center">
+                        {c.name}
+                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition" />
+                      </h3>
+
+                      <p className="text-sm text-white/80 mt-1">
+                        {c.description}
+                      </p>
+                    </div>
                   </div>
-
-                  <CardContent className="p-6">
-                    <h3 className="text-xl font-semibold flex justify-between">
-                      {c.name}
-                      <ArrowRight className="h-5 w-5" />
-                    </h3>
-
-                    <p className="text-sm text-muted-foreground">
-                      {c.description}
-                    </p>
-                  </CardContent>
                 </Card>
               </Link>
             </div>
@@ -153,7 +176,7 @@ const CategoryGrid = ({ categories }) => {
         {/* CENTER */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
           <div ref={centerTextRef} className="text-center pointer-events-auto">
-            <h2 className="text-5xl font-bold mb-6">Our Strengths</h2>
+            <h2 className="text-5xl font-bold mb-6">Our collections </h2>
 
             <p className="text-lg text-muted-foreground max-w-md">
               Why customers choose us. Technology depth and unmatched
@@ -164,28 +187,33 @@ const CategoryGrid = ({ categories }) => {
 
         {/* RIGHT */}
         <div ref={rightRef} className="space-y-10 w-72 pb-10">
-          {right.map((c) => (
-            <div key={c.id}>
+          {right.map((c, index) => (
+            <div key={`${c.id}-${index}`}>
               <Link to={c.link} className="group block">
-                <Card className="overflow-hidden">
-                  <div className="aspect-square">
+                <Card className="overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all duration-500">
+                  <div className="relative w-full h-[420px] overflow-hidden">
+                    {/* IMAGE */}
                     <img
                       src={c.image}
                       alt={c.name}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                     />
+
+                    {/* GRADIENT */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+                    {/* TEXT */}
+                    <div className="absolute bottom-0 left-0 w-full p-5 text-white">
+                      <h3 className="text-lg font-semibold flex justify-between items-center">
+                        {c.name}
+                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition" />
+                      </h3>
+
+                      <p className="text-sm text-white/80 mt-1">
+                        {c.description}
+                      </p>
+                    </div>
                   </div>
-
-                  <CardContent className="p-6">
-                    <h3 className="text-xl font-semibold flex justify-between">
-                      {c.name}
-                      <ArrowRight className="h-5 w-5" />
-                    </h3>
-
-                    <p className="text-sm text-muted-foreground">
-                      {c.description}
-                    </p>
-                  </CardContent>
                 </Card>
               </Link>
             </div>

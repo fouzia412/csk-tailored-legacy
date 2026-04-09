@@ -9,10 +9,27 @@ import Contact from "./pages/Contact";
 import CollectionSuiting from "./pages/CollectionSuiting";
 import CollectionShirting from "./pages/CollectionShirting";
 import CollectionWedding from "./pages/CollectionWedding";
+import CollectionKurta from "./pages/CollectionKurta";
+import CollectionReadyToWear from "./pages/CollectionReadyToWear";
+import Careers from "./pages/Careers";
+import ProductDetails from "./pages/ProductDetails";
+import Customize from "./pages/Customize";
+import Gallery from "./pages/Gallery";
 import NotFound from "./pages/NotFound";
 import { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import ScrollToTop from "./components/ScrollToTop";
+import WhatsAppIcon from "./components/WhatsAppIcon";
+import TermsPage from "./pages/Terms";
+import PrivacyPage from "./pages/Privacy";
+
+import AdminLogin from "./pages/admin/Login";
+import AdminDashboard from "./pages/admin/Dashboard.tsx";
+import AdminProducts from "./pages/admin/Products.tsx";
+import AdminEnquiries from "./pages/admin/Enquiries.tsx";
+import AdminFabrics from "./pages/admin/Fabrics.tsx";
+import AdminCareers from "./pages/admin/Careers.tsx";
 
 const queryClient = new QueryClient();
 
@@ -31,7 +48,14 @@ const App = () => {
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
+        <BrowserRouter
+          future={{
+            v7_startTransition: true,
+            v7_relativeSplatPath: true,
+          }}
+        >
+          <ScrollToTop />
+          <WhatsAppIcon />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/about" element={<About />} />
@@ -45,10 +69,32 @@ const App = () => {
               element={<CollectionShirting />}
             />
             <Route
-              path="/collections/wedding-sherwani"
+              path="/collections/wedding"
               element={<CollectionWedding />}
             />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route
+              path="/collections/kurta-pyjama"
+              element={<CollectionKurta />}
+            />
+            <Route
+              path="/collections/ready-to-wear"
+              element={<CollectionReadyToWear />}
+            />
+            <Route path="/careers" element={<Careers />} />
+            <Route path="/product/:id" element={<ProductDetails />} />
+            <Route path="/customize" element={<Customize />} />
+            <Route path="/gallery" element={<Gallery />} />
+            
+            {/* Admin Routes */}
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/products" element={<AdminProducts />} />
+            <Route path="/admin/enquiries" element={<AdminEnquiries />} />
+            <Route path="/admin/fabrics" element={<AdminFabrics />} />
+            <Route path="/admin/careers" element={<AdminCareers />} />
+
+            <Route path="/terms" element={<TermsPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

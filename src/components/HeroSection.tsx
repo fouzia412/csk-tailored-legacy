@@ -6,18 +6,30 @@ import { useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-
+import bgHeroHome from "/images/banner.mp4";
 gsap.registerPlugin(ScrollTrigger);
 // gsap.registerPlugin(SplitText);
 
 const HeroSection = () => {
-  const bgRef = useRef<HTMLDivElement>(null);
+  const bgRef = useRef<HTMLVideoElement>(null);
   const line1Ref = useRef<HTMLSpanElement>(null);
   const line2Ref = useRef<HTMLSpanElement>(null);
   const pRef = useRef<HTMLParagraphElement>(null);
   const btnRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
+    // Skip scroll-linked animations on mobile for better UX
+    const isMobile = window.innerWidth < 768;
+
+    if (isMobile) {
+      // Basic entry animation for mobile instead of scroll-linked
+      gsap.from(line1Ref.current, { y: 30, opacity: 0, delay: 0.2 });
+      gsap.from(line2Ref.current, { y: 30, opacity: 0, delay: 0.4 });
+      gsap.from(pRef.current, { y: 20, opacity: 0, delay: 0.6 });
+      gsap.from(btnRef.current, { y: 20, opacity: 0, delay: 0.8 });
+      return;
+    }
+
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: bgRef.current,
@@ -49,14 +61,14 @@ const HeroSection = () => {
   return (
     <section className="sticky top-0 md:h-screen h-[80dvh] flex items-center justify-center overflow-hidden">
       {/* Background */}
-      <div
+      <video
         ref={bgRef}
-        className="absolute inset-0 z-0"
-        style={{
-          backgroundImage: `linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.5)), url("/images/banner.jpg")`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
+        className="absolute inset-0 w-full h-full object-cover z-0"
+        src={bgHeroHome}
+        autoPlay
+        loop
+        muted
+        playsInline
       />
 
       {/* CENTER TEXT */}
@@ -83,15 +95,19 @@ const HeroSection = () => {
         <div className="overflow-hidden">
           <p ref={pRef} className="text-white/90 text-center mt-6 max-w-xl">
             Premium suiting, shirting, and groomwear fabrics curated in
-            Hyderabad since 1998.
+            Hyderabad since 1991.
           </p>
         </div>
         <div className="overflow-hidden">
           <div ref={btnRef} className="flex gap-4 mt-6">
-            <Button className="bg-yellow-400 text-black hover:bg-yellow-300">
-              Explore Suiting
-            </Button>
-            <Button variant="outline">Wedding Collection</Button>
+            <Link to="/collections/suiting">
+              <Button className="bg-yellow-400 text-black hover:bg-yellow-300">
+                Explore Suiting
+              </Button>
+            </Link>
+            <Link to="/collections/wedding">
+              <Button variant="outline">Wedding Collection</Button>
+            </Link>
           </div>
         </div>
       </div>

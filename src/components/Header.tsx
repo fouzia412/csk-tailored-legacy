@@ -10,22 +10,22 @@ const Header = () => {
 
   const navLinks = [
     { name: "Home", path: "/" },
+    { name: "Kurta Pyjama", path: "/collections/kurta-pyjama" },
     { name: "Suiting", path: "/collections/suiting" },
     { name: "Shirting", path: "/collections/shirting" },
-    { name: "Wedding", path: "/collections/wedding-sherwani" },
+    { name: "Wedding", path: "/collections/wedding" },
+    { name: "Ready To Wear", path: "/collections/ready-to-wear" },
     { name: "About", path: "/about" },
+    { name: "Careers", path: "/careers" },
+    { name: "Our Store", path: "/gallery" },
     { name: "Contact", path: "/contact" },
   ];
 
-  const isActive = (path) => location.pathname === path;
+  const isActive = (path: string) => location.pathname === path;
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(window.scrollY > 50);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -36,19 +36,21 @@ const Header = () => {
     <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
         isScrolled
-          ? "bg-background/80 backdrop-blur-md border-b border-border shadow-sm py-0"
-          : "bg-transparent border-transparent py-2"
+          ? "bg-background/80 backdrop-blur-md border-b border-border shadow-sm py-2"
+          : "bg-transparent border-transparent py-4"
       }`}
     >
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+        {/* ❌ removed h-16 */}
+        <div className="flex items-center justify-between">
           <Link
             to="/"
-            className="transition-transform duration-300 hover:scale-95"
+            className="flex items-center transition-transform duration-300 hover:scale-95"
           >
             <img
               src="/images/logo.png"
-              className={`object-contain transition-all duration-300 h-14`}
+              alt="logo"
+              className="h-24 w-auto object-contain"
             />
           </Link>
 
@@ -57,7 +59,7 @@ const Header = () => {
               <Link
                 key={link.path}
                 to={link.path}
-                className={`text-sm font-medium transition-colors hover:text-primary ${
+                className={`text-xl font-medium transition-colors hover:text-primary ${
                   isActive(link.path)
                     ? isScrolled
                       ? "text-primary"
@@ -87,7 +89,7 @@ const Header = () => {
         </div>
 
         {isMenuOpen && (
-          <nav className="md:hidden py-4 border-t border-border bg-background">
+          <nav className="md:hidden p-4 border-t border-border bg-background mt-2 rounded-2xl shadow-md">
             <div className="flex flex-col gap-4">
               {navLinks.map((link) => (
                 <Link

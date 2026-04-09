@@ -1,7 +1,17 @@
-import categorySuiting from "@/assets/category-suiting.jpg";
-import categoryShirting from "@/assets/category-shirting.jpg";
-import categoryWedding from "@/assets/category-wedding.jpg";
 
+import categorySuiting from "/images/suiting.png";
+import categoryShirting from "/images/shirting.png";
+import categoryWedding from "/images/wedding-sherwan.png";
+import categoryTuxedo from "/images/tuxedo.png";
+import categoryIndoWestern from "/images/indo-western.png";
+import categoryBlazers from "/images/blazers.png";
+import categoryJodhpuri from "/images/jodhpuri.png";
+import categoryTrousers from "/images/trousers.png";
+import categoryDCollection from "/images/designer-collections.jpg";
+import categoryEthnic from "/images/ethnic.jpg";
+import categoryPartyWear from "/images/party-wear.png";
+import categoryVelvet from "/images/velvet.png";
+import categoryLinen from "/images/linen-wear.png";
 export const categories = [
   {
     id: "suiting",
@@ -24,14 +34,14 @@ export const categories = [
     name: "Wedding & Sherwani",
     description: "Brocade, silk, and embroidered groomwear",
     image: categoryWedding,
-    link: "/collections/wedding-sherwani",
+    link: "/collections/wedding",
     featured: true,
   },
   {
     id: "tuxedo",
     name: "Tuxedo",
     description: "Black-tie dinner jacket fabrics",
-    image: categorySuiting,
+    image: categoryTuxedo,
     link: "/collections/suiting",
     featured: true,
   },
@@ -39,16 +49,92 @@ export const categories = [
     id: "indo-western",
     name: "Indo-Western",
     description: "Modern fusion formal wear",
-    image: "/images/card1.jpeg",
+    image: categoryIndoWestern,
+    link: "/collections/suiting",
+    featured: true,
+  },
+
+  // 🔥 NEW CATEGORIES
+
+  {
+    id: "blazers",
+    name: "Blazers",
+    description: "Smart casual and formal blazers",
+    image: categoryBlazers,
     link: "/collections/suiting",
     featured: true,
   },
   {
-    id: "shirting",
-    name: "Shirting",
-    description: "Fine cotton and linen blends",
+    id: "linen-wear",
+    name: "Linen Wear",
+    description: "Lightweight breathable linen fabrics",
+    image: categoryLinen,
+    link: "/collections/shirting",
+    featured: true,
+  },
+  {
+    id: "velvet",
+    name: "Velvet",
+    description: "Luxury velvet fabrics for occasions",
+    image: categoryVelvet,
+    link: "/collections/wedding",
+    featured: true,
+  },
+  {
+    id: "bandhgala",
+    name: "Bandhgala",
+    description: "Classic royal Indian formal wear",
+    image: categoryIndoWestern,
+    link: "/collections/wedding",
+    featured: true,
+  },
+  {
+    id: "sherwani-sets",
+    name: "Sherwani Sets",
+    description: "Traditional and festive kurta materials",
+    image: categoryWedding,
+    link: "/collections/wedding",
+    featured: true,
+  },
+  {
+    id: "jodhpuri",
+    name: "Jodhpuri",
+    description: "Elegant prince coat styles",
+    image: categoryJodhpuri,
+    link: "/collections/wedding",
+    featured: true,
+  },
+  {
+    id: "formal-trousers",
+    name: "Formal Trousers",
+    description: "Perfect fabrics for tailored pants",
+    image: categoryTrousers,
+    link: "/collections/suiting",
+    featured: true,
+  },
+  {
+    id: "casual-shirts",
+    name: "Casual Shirts",
+    description: "Comfort daily wear fabrics",
     image: categoryShirting,
     link: "/collections/shirting",
+    featured: true,
+  },
+
+  {
+    id: "party-wear",
+    name: "Party Wear",
+    description: "Stylish fabrics for celebrations",
+    image: categoryPartyWear,
+    link: "/collections/suiting",
+    featured: true,
+  },
+  {
+    id: "designer-collection",
+    name: "Designer Collection",
+    description: "Premium designer fabrics",
+    image: categoryDCollection,
+    link: "/collections/suiting",
     featured: true,
   },
 ];

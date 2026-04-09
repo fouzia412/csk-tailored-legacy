@@ -4,9 +4,9 @@ const VisitUs = () => {
   return (
     <section
       id="locations"
-      className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-secondary/20 to-background"
+      className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-secondary/20 to-background "
     >
-      <div className="container mx-auto max-w-6xl">
+      <div className="container mx-auto max-w-6xl pt-10">
         <div className="text-center mb-16">
           <h2 className="text-4xl sm:text-5xl font-display mb-4 text-foreground">
             Visit Us

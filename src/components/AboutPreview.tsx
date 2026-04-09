@@ -4,7 +4,7 @@ import { Award, Users, Scissors, Briefcase } from "lucide-react";
 const featuresLeft = [
   {
     icon: Award,
-    title: "Since 1998",
+    title: "Since 1991",
     description:
       "25+ years of textile expertise in Hyderabad's premium fabric market",
   },
@@ -43,14 +43,14 @@ const fadeUp: Variants = {
 
 const AboutPreview = () => {
   return (
-    <section className="py-16 md:py-20 bg-white relative z-10">
-      <div className="max-w-7xl mx-auto px-4">
+    <section className="py-16 md:py-24 bg-white relative z-10">
+      <div className="max-w-7xl mx-auto px-6">
         {/* TITLE */}
         <motion.div
           initial="hidden"
           whileInView="show"
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-12 md:mb-16"
         >
           <motion.h2
             variants={fadeUp}
@@ -63,15 +63,15 @@ const AboutPreview = () => {
           <motion.p
             variants={fadeUp}
             custom={1}
-            className="text-muted-foreground mt-4 max-w-xl mx-auto"
+            className="text-muted-foreground mt-4 max-w-xl mx-auto text-base md:text-lg"
           >
             Trusted by Hyderabad's discerning men for over two decades
           </motion.p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-3 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 md:gap-12 items-center">
           {/* LEFT */}
-          <div className="space-y-12">
+          <div className="space-y-8 md:space-y-12">
             {featuresLeft.map((item, index) => (
               <motion.div
                 key={index}
@@ -81,9 +81,16 @@ const AboutPreview = () => {
                 viewport={{ once: true }}
                 custom={index}
               >
-                <h3 className="text-3xl font-semibold mb-2">{item.title}</h3>
+                <div className="flex items-center gap-4 mb-2">
+                  <div className="p-2 bg-yellow-400/10 rounded-lg">
+                    <item.icon className="w-5 h-5 text-yellow-600" />
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-semibold">
+                    {item.title}
+                  </h3>
+                </div>
 
-                <p className="text-xl text-muted-foreground mb-4">
+                <p className="text-base md:text-xl text-muted-foreground mb-4">
                   {item.description}
                 </p>
 
@@ -103,7 +110,7 @@ const AboutPreview = () => {
             custom={1}
             className="flex justify-center"
           >
-            <div className="w-full max-w-md aspect-[4/4.5] overflow-hidden shadow-xl">
+            <div className="w-full max-w-sm md:max-w-md aspect-[4/4.5] overflow-hidden shadow-2xl rounded-2xl">
               <img
                 src="/images/aboutPreview.jpg"
                 alt="CSK Textiles"
@@ -113,7 +120,7 @@ const AboutPreview = () => {
           </motion.div>
 
           {/* RIGHT */}
-          <div className="space-y-12">
+          <div className="space-y-8 md:space-y-12">
             {featuresRight.map((item, index) => (
               <motion.div
                 key={index}
@@ -123,9 +130,16 @@ const AboutPreview = () => {
                 viewport={{ once: true }}
                 custom={index}
               >
-                <h3 className="text-3xl font-semibold mb-2">{item.title}</h3>
+                <div className="flex items-center gap-4 mb-2">
+                  <div className="p-2 bg-yellow-400/10 rounded-lg">
+                    <item.icon className="w-5 h-5 text-yellow-600" />
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-semibold">
+                    {item.title}
+                  </h3>
+                </div>
 
-                <p className="text-xl text-muted-foreground mb-4">
+                <p className="text-base md:text-xl text-muted-foreground mb-4">
                   {item.description}
                 </p>
 
