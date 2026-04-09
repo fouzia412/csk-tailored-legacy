@@ -1,26 +1,24 @@
 import { useState, useMemo, useEffect } from "react";
-import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { useProducts } from "@/hooks/useProducts";
-import suitingBanner from "/images/suitingBanner.png";
 import { ChevronRight, Filter, ShoppingBag, Loader2 } from "lucide-react";
 import { ProductCard } from "@/components/ui/product-card";
 import AnnouncementBar from "@/components/AnnouncementBar";
 import { FilterDropdown } from "@/components/FilterDropdown";
 
-const CollectionSuiting = () => {
-  const { data: products = [], isLoading } = useProducts("suiting");
+const CollectionKurta = () => {
+  const { data: products = [], isLoading } = useProducts("kurta-pyjama");
   const [activeFilter, setActiveFilter] = useState("All");
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const filters = ["All", "Silk", "Linen", "Cotton", "Textured"];
+  const filters = ["All", "Cotton", "Silk", "Linen", "Embroidered"];
 
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
@@ -45,21 +43,10 @@ const CollectionSuiting = () => {
       <Header />
 
       <main className="flex-grow">
-        <section className="relative py-28 md:py-40 overflow-hidden">
-          <motion.div
-            initial={{ scale: 1.1 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 1.5, ease: "easeOut" }}
-            className="absolute inset-0"
-          >
-            <img
-              src={suitingBanner}
-              alt="Premium Suiting"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-black/20" />
-          </motion.div>
-
+        <section className="relative py-28 md:py-40 overflow-hidden bg-primary/20">
+          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1597843797221-39656811a01d?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-60 mix-blend-overlay" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-[#050505]" />
+          
           <div className="relative h-full container mx-auto px-4 flex flex-col justify-center items-center text-center">
             <motion.div
               initial={{ y: 30, opacity: 0 }}
@@ -67,14 +54,13 @@ const CollectionSuiting = () => {
               transition={{ delay: 0.5, duration: 0.8 }}
             >
               <span className="inline-block px-4 py-1 border border-white/20 rounded-full text-[10px] font-bold tracking-[0.3em] uppercase backdrop-blur-md">
-                Noble Weaves
+                Tradition Reinvented
               </span>
               <h1 className="text-6xl md:text-8xl font-display font-medium my-4 tracking-tight">
-                Master <span className="italic font-light">Suiting</span>
+                Kurta <span className="italic font-light">Pyjama</span>
               </h1>
               <p className="max-w-xl mx-auto text-lg text-white/60 font-light leading-relaxed">
-                The pinnacle of masculine elegance. Discover the world's most
-                prestigious suiting fabrics.
+                Heritage craftsmanship meets contemporary design. Discover our curated collection of ethnic elegance.
               </p>
             </motion.div>
           </div>
@@ -85,11 +71,11 @@ const CollectionSuiting = () => {
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <Link
                 to="/customize"
-                state={{ outfit: "Suit" }}
+                state={{ outfit: "Wedding outfit" }}
                 className="w-full md:w-auto"
               >
                 <Button className="w-full md:w-auto rounded-full px-8 h-12 md:h-14 bg-white text-black hover:bg-gray-200 transition-all duration-300 shadow-xl group text-xs md:text-sm font-bold tracking-wide">
-                  Customize
+                  Explore Customization
                   <ChevronRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
@@ -100,7 +86,7 @@ const CollectionSuiting = () => {
                     <Filter className="w-4 h-4 text-white/70" />
                   </div>
                   <span className="text-[10px] uppercase tracking-[0.2em] text-white/60 font-bold hidden sm:block">
-                    Refine Fabric
+                    Filter by Fabric
                   </span>
                 </div>
 
@@ -122,7 +108,7 @@ const CollectionSuiting = () => {
               <div className="flex flex-col items-center justify-center py-40 space-y-4">
                 <Loader2 className="w-10 h-10 text-black/20 animate-spin" />
                 <p className="text-[10px] uppercase tracking-[0.3em] text-black/40 font-bold">
-                  Summoning Master Suiting
+                  Curating Your Collection
                 </p>
               </div>
             ) : filteredProducts.length > 0 ? (
@@ -156,10 +142,10 @@ const CollectionSuiting = () => {
               <div className="text-center py-40">
                 <ShoppingBag className="w-16 h-16 text-black/5 mx-auto mb-6" />
                 <h3 className="text-3xl font-display font-medium mb-2 uppercase tracking-tight text-black/80">
-                  Archives empty
+                  Collection Pending
                 </h3>
                 <p className="text-black/40 font-light">
-                  New prestigious fabrics arriving soon.
+                  New traditional masterpieces are being crafted.
                 </p>
               </div>
             )}
@@ -172,4 +158,4 @@ const CollectionSuiting = () => {
   );
 };
 
-export default CollectionSuiting;
+export default CollectionKurta;

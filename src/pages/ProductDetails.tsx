@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { products } from "@/data/products";
+import { useProduct } from "@/hooks/useProducts";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -17,29 +17,46 @@ import {
   Mail,
   MessageSquare,
   Loader2,
+  AlertCircle
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { getImageUrl } from "@/api/config";
 
 const ProductDetails = () => {
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
-  const product = products.find((p) => p.id === id);
-  const [activeImage, setActiveImage] = useState(product?.image[0] || "");
+  const { data: product, isLoading, isError } = useProduct(id);
+  const [activeImage, setActiveImage] = useState("");
 
   useEffect(() => {
-    if (product) setActiveImage(product.image[0]);
+    if (product?.image?.length) {
+      setActiveImage(Array.isArray(product.image) ? product.image[0] : product.image);
+    }
   }, [product]);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  if (!product) {
+
+  if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-display mb-4">Product not found</h2>
-          <Button onClick={() => navigate(-1)}>Go Back</Button>
+      <div className="min-h-screen flex flex-col items-center justify-center space-y-4">
+        <Loader2 className="w-10 h-10 text-primary animate-spin" />
+        <p className="text-[10px] uppercase tracking-[0.3em] font-bold opacity-50">Retrieving Masterpiece Details</p>
+      </div>
+    );
+  }
+
+  if (isError || !product) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="text-center max-w-sm">
+          <AlertCircle className="w-12 h-12 text-red-500/20 mx-auto mb-6" />
+          <h2 className="text-2xl font-display mb-2">Heritage Record Not Found</h2>
+          <p className="text-sm text-muted-foreground mb-8">The requested collection piece might have been moved or archived.</p>
+          <Button onClick={() => navigate(-1)} className="rounded-full px-8">Return to Collection</Button>
         </div>
       </div>
     );
@@ -47,28 +64,54 @@ const ProductDetails = () => {
 
   const GOOGLE_SCRIPT_URL =
     "https://script.google.com/macros/s/AKfycbwwRo_8d5_VRXVQ2fXPXL3kmOisEEsvHfL4qrVXNRNDRwzP696S8g3TOkl5SJIhqUKE/exec";
+    
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     if (loading) return;
-
     setLoading(true);
 
     const form = e.currentTarget;
-
-    const formData = new FormData(form);
-
-    formData.append("product", product?.name || "");
-    formData.append("type", "product");
+    const formValues = new FormData(form);
+    const data = {
+      name: formValues.get("name") as string,
+      phone: formValues.get("phone") as string,
+      message: formValues.get("message") as string,
+    };
 
     try {
-      await fetch(GOOGLE_SCRIPT_URL, {
+      const API_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
+
+      // 1. Send to CMS Backend
+      const res = await fetch(`${API_URL}/inquiries`, {
         method: "POST",
-        body: formData,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...data,
+          type: "product",
+          productCategory: product?.category || "general",
+          productName: product?.name
+        })
       });
 
-      toast.success("Inquiry sent successfully!");
-      form.reset();
+      // 2. Backup to Google Script
+      const payload = new FormData();
+      payload.append("name", data.name);
+      payload.append("phone", data.phone);
+      payload.append("message", data.message);
+      payload.append("product", product?.name || "");
+      payload.append("type", "product");
+
+      fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        body: payload,
+      }).catch(console.error);
+
+      if (res.ok) {
+        toast.success("Enquiry sent successfully");
+        form.reset();
+      } else {
+        throw new Error("Backend failed");
+      }
     } catch (error) {
       console.error(error);
       toast.error("Submission failed. Try again.");
@@ -77,8 +120,10 @@ const ProductDetails = () => {
     }
   };
 
+  const productImages = Array.isArray(product.image) ? product.image : [product.image];
+
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen flex flex-col bg-white overflow-x-hidden font-body">
       <Header />
 
       <main className="flex-grow">
@@ -91,7 +136,7 @@ const ProductDetails = () => {
             className="absolute inset-0"
           >
             <img
-              src={activeImage}
+              src={getImageUrl(activeImage)}
               alt={product.name}
               className="w-full h-full object-cover blur-sm scale-110"
             />
@@ -106,11 +151,11 @@ const ProductDetails = () => {
             >
               <Badge
                 variant="outline"
-                className="mb-4 border-white/30 text-white/70 uppercase tracking-[0.3em] py-1 px-4 rounded-full backdrop-blur-sm"
+                className="mb-4 border-white/30 text-white/70 uppercase tracking-[0.3em] py-1 px-4 rounded-full backdrop-blur-sm font-bold"
               >
-                Product Details
+                Collection Details
               </Badge>
-              <h1 className="text-4xl md:text-6xl font-display font-medium text-white tracking-tight lowercase first-letter:uppercase">
+              <h1 className="text-4xl md:text-6xl font-display font-medium text-white tracking-tight leading-none">
                 {product.name}
               </h1>
             </motion.div>
@@ -123,7 +168,7 @@ const ProductDetails = () => {
             className="flex items-center gap-2 text-muted-foreground hover:text-black transition-colors mb-12 group"
           >
             <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
-            <span className="text-sm uppercase tracking-widest font-medium">
+            <span className="text-[10px] uppercase tracking-widest font-bold">
               Back to Collection
             </span>
           </button>
@@ -136,40 +181,43 @@ const ProductDetails = () => {
               transition={{ duration: 0.8 }}
               className="space-y-6"
             >
-              <div className="aspect-[4/5] rounded-3xl overflow-hidden bg-black shadow-2xl flex items-center justify-center">
+              <div className="aspect-[4/5] rounded-[2.5rem] overflow-hidden bg-[#fbf9f6] border border-slate-100 shadow-2xl flex items-center justify-center p-4">
                 <AnimatePresence mode="wait">
                   <motion.img
                     key={activeImage}
                     src={activeImage}
                     alt={product.name}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="max-w-full max-h-full object-contain"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 1.05 }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                    className="max-w-full max-h-full object-contain drop-shadow-2xl"
                   />
                 </AnimatePresence>
               </div>
-              <div className="grid grid-cols-5 gap-4">
-                {product.image.map((img, i) => (
-                  <div
-                    key={i}
-                    onClick={() => setActiveImage(img)}
-                    className={cn(
-                      "aspect-square rounded-2xl overflow-hidden bg-muted cursor-pointer transition-all duration-300 border-2",
-                      activeImage === img
-                        ? "border-black scale-105"
-                        : "border-transparent opacity-60 hover:opacity-100",
-                    )}
-                  >
-                    <img
-                      src={img}
-                      alt=""
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ))}
-              </div>
+              
+              {productImages.length > 1 && (
+                <div className="grid grid-cols-5 gap-4 px-2">
+                  {productImages.map((img, i) => (
+                    <div
+                      key={i}
+                      onClick={() => setActiveImage(img)}
+                      className={cn(
+                        "aspect-square rounded-2xl overflow-hidden bg-slate-50 cursor-pointer transition-all duration-300 border-2 p-1",
+                        activeImage === img
+                          ? "border-primary scale-105 shadow-lg shadow-primary/10"
+                          : "border-transparent opacity-60 hover:opacity-100",
+                      )}
+                    >
+                      <img
+                        src={getImageUrl(img)}
+                        alt=""
+                        className="w-full h-full object-cover rounded-xl"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
             </motion.div>
 
             {/* Product Info Section */}
@@ -179,76 +227,79 @@ const ProductDetails = () => {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="flex flex-col"
             >
-              <div className="mb-8">
-                <div className="flex items-center gap-4 mb-4">
-                  {product.isNew && (
-                    <Badge className="rounded-full px-4 py-1 bg-black text-white uppercase tracking-widest text-[10px]">
+              <div className="mb-10">
+                <div className="flex items-center gap-4 mb-6">
+                  {product.isNewArrival && (
+                    <Badge className="rounded-full px-4 py-1.5 bg-primary text-white uppercase tracking-widest text-[9px] font-black border-none shadow-elegant">
                       New Release
                     </Badge>
                   )}
                   <Badge
                     variant="outline"
-                    className="rounded-full px-4 py-1 border-black/10 text-muted-foreground uppercase tracking-widest text-[10px]"
+                    className="rounded-full px-4 py-1.5 border-slate-200 text-slate-400 uppercase tracking-widest text-[9px] font-bold"
                   >
                     Standard Fitting
                   </Badge>
                 </div>
-                <h1 className="text-4xl md:text-5xl font-display font-medium text-foreground tracking-tight mb-4 lowercase first-letter:uppercase">
+                <h2 className="text-4xl md:text-5xl font-display font-medium text-slate-800 tracking-tight mb-6 leading-tight">
                   {product.name}
-                </h1>
-                <p className="text-xl text-muted-foreground font-light leading-relaxed">
+                </h2>
+                <div className="h-1 w-20 bg-accent mb-8" />
+                <p className="text-xl text-slate-500 font-light leading-relaxed max-w-lg">
                   {product.description}
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 gap-8 py-8 border-y border-black/5 mb-12">
+              <div className="grid grid-cols-2 gap-y-10 py-10 border-y border-slate-100 mb-12">
                 <div>
-                  <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-2">
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400 mb-3 font-bold">
                     Fabric Selection
                   </p>
-                  <p className="font-medium">{product.fabric}</p>
+                  <p className="font-bold text-slate-700">{product.fabric}</p>
                 </div>
                 <div>
-                  <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-2">
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400 mb-3 font-bold">
                     Style Recommended
                   </p>
-                  <p className="font-medium">
-                    {product.style || "Tailored Fit"}
+                  <p className="font-bold text-slate-700">
+                    {product.style || "Signature Tailored Fit"}
                   </p>
                 </div>
                 <div>
-                  <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-2">
-                    Available Colors
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400 mb-3 font-bold">
+                    Available Palette
                   </p>
-                  <div className="flex gap-2 items-center">
-                    {product.colors.map((color, idx) => (
+                  <div className="flex gap-2.5 items-center">
+                    {(product.colors || []).map((color, idx) => (
                       <span
                         key={idx}
-                        className="w-4 h-4 rounded-full border border-black/5"
+                        title={color}
+                        className="w-5 h-5 rounded-full border border-slate-100 shadow-sm"
                         style={{
                           backgroundColor: color.toLowerCase().includes("black")
                             ? "#000"
                             : color.toLowerCase().includes("navy")
-                              ? "#000080"
+                              ? "#1a2a44"
                               : color.toLowerCase().includes("charcoal")
                                 ? "#36454F"
-                                : "#ccc",
+                                : color.toLowerCase().includes("gold")
+                                ? "#D4AF37"
+                                : "#f0f0f0",
                         }}
                       />
                     ))}
-                    <span className="text-sm ml-1">
-                      {product.colors.length} options
+                    <span className="text-xs font-bold text-slate-400 ml-1">
+                      {product.colors?.length || 0} Professional Options
                     </span>
                   </div>
                 </div>
                 <div>
-                  <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-2">
-                    Lead Time
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400 mb-3 font-bold">
+                    Operational Lead Time
                   </p>
-                  <p className="font-medium">10 - 14 Business Days</p>
+                  <p className="font-bold text-slate-700">10-14 Business Days</p>
                 </div>
-                <div>
-                  {" "}
+                <div className="col-span-2 pt-4">
                   <Button
                     type="button"
                     variant="outline"
@@ -262,92 +313,81 @@ const ProductDetails = () => {
                             : "Wedding outfit";
                       navigate("/customize", { state: { outfit: outfitType } });
                     }}
-                    className="w-full h-12 rounded-xl border-black text-black font-medium shadow-lg transition-transform hover:scale-[1.02]"
+                    className="w-full h-14 rounded-2xl border-primary text-primary hover:bg-primary hover:text-white font-bold uppercase tracking-[0.1em] text-[11px] shadow-sm transition-all hover:shadow-lg"
                   >
-                    Customize Design
+                    Configure Custom Design
                   </Button>
                 </div>
               </div>
 
-              <div className="prose prose-sm text-muted-foreground mb-12">
-                <h4 className="text-black font-medium mb-4 uppercase tracking-widest text-xs">
-                  Exquisite Details
+              <div className="prose prose-sm text-slate-500 mb-12">
+                <h4 className="text-slate-800 font-bold mb-5 uppercase tracking-widest text-[10px]">
+                  Legacy Craftsmanship
                 </h4>
-                <p className="leading-relaxed">
+                <p className="leading-relaxed font-light">
                   {product.longDescription ||
-                    "This premium fabric is meticulously selected and curated for the modern gentleman. Every strand of thread represents our commitment to legacy and fine tailoring."}
+                    "Each thread is curated for the modern connoisseur. Our master tailors ensure that every piece reflecting the CSK heritage is executed with mathematical precision and artistic flair."}
                 </p>
               </div>
 
-              {/* Inquiry Form */}
-              <div className="bg-muted/30 p-8 rounded-3xl border border-black/5">
-                <h3 className="text-lg font-display font-medium mb-6 flex items-center gap-2">
-                  <MessageSquare className="w-5 h-5 text-primary" />
-                  Inquire About This Design
-                </h3>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
+              {/* Inquiry Form - Premium Card */}
+              <div className="bg-[#fbf9f6] p-10 rounded-[2.5rem] border border-slate-100 shadow-elegant">
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center text-white shadow-lg shadow-primary/20">
+                    <MessageSquare className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold uppercase tracking-[0.15em] text-slate-800">
+                      Bespoke Inquiry
+                    </h3>
+                    <p className="text-[10px] text-slate-400 uppercase tracking-widest font-bold mt-1">Consultation Request</p>
+                  </div>
+                </div>
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div className="space-y-2.5">
                       <Label
                         htmlFor="name"
-                        className="text-[10px] uppercase tracking-widest ml-1"
+                        className="text-[10px] uppercase tracking-widest font-black text-slate-400 ml-1"
                       >
-                        Your Name
+                        Identifier
                       </Label>
                       <Input
                         id="name"
                         name="name"
-                        placeholder="Your Name"
+                        placeholder="Full Name"
                         required
-                        className="bg-white border-none rounded-xl focus-visible:ring-1 focus-visible:ring-primary shadow-sm"
+                        className="bg-white border-slate-100 h-12 rounded-xl focus:ring-primary/5 focus:border-primary transition-all font-medium"
                       />
                     </div>
-                    <div className="space-y-2">
+                    <div className="space-y-2.5">
                       <Label
                         htmlFor="phone"
-                        className="text-[10px] uppercase tracking-widest ml-1"
+                        className="text-[10px] uppercase tracking-widest font-black text-slate-400 ml-1"
                       >
-                        Mobile Number
+                        Contact Channel
                       </Label>
                       <Input
                         id="phone"
                         name="phone"
                         type="tel"
-                        placeholder="Enter mobile number"
+                        placeholder="Mobile Number"
                         required
-                        minLength={10}
-                        maxLength={10}
-                        className="bg-white border-none rounded-xl focus-visible:ring-1 focus-visible:ring-primary shadow-sm"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label
-                        htmlFor="email"
-                        className="text-[10px] uppercase tracking-widest ml-1"
-                      >
-                        Contact Email
-                      </Label>
-                      <Input
-                        className="bg-white border-none rounded-xl focus-visible:ring-1 focus-visible:ring-primary shadow-sm"
-                        required
-                        id="email"
-                        name="email"
-                        type="email"
-                        placeholder="Your Email"
+                        className="bg-white border-slate-100 h-12 rounded-xl focus:ring-primary/5 focus:border-primary transition-all font-medium"
                       />
                     </div>
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-2.5">
                     <Label
                       htmlFor="message"
-                      className="text-[10px] uppercase tracking-widest ml-1"
+                      className="text-[10px] uppercase tracking-widest font-black text-slate-400 ml-1"
                     >
-                      Preferred Style / Measurements
+                      Specifications / Objectives
                     </Label>
                     <Textarea
                       id="message"
-                      placeholder="I am interested in a ..."
-                      className="bg-white border-none rounded-xl focus-visible:ring-1 focus-visible:ring-primary shadow-sm min-h-[100px]"
+                      placeholder="Describe your desired fit and occasion..."
+                      className="bg-white border-slate-100 rounded-xl focus:ring-primary/5 focus:border-primary transition-all min-h-[120px] font-medium p-4"
                       required
                       name="message"
                     />
@@ -355,32 +395,36 @@ const ProductDetails = () => {
                   <Button
                     type="submit"
                     disabled={loading}
-                    className="w-full h-12 rounded-xl bg-black hover:bg-black/90 text-white font-medium shadow-lg transition-all duration-300 hover:scale-[1.02] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="w-full h-14 rounded-2xl bg-primary hover:bg-primary/95 text-white font-bold uppercase tracking-[0.2em] text-[11px] shadow-elegant transition-all active:scale-[0.98] disabled:opacity-70 flex items-center justify-center gap-3"
                   >
                     {loading ? (
                       <>
                         <Loader2 className="w-4 h-4 animate-spin" />
-                        Sending...
+                        Transmitting...
                       </>
                     ) : (
-                      "Book Consultation"
+                      "Secure Consultation"
                     )}
                   </Button>
                 </form>
               </div>
 
               {/* Trust Indicators */}
-              <div className="flex flex-wrap gap-8 mt-12 pt-8 border-t border-black/5">
-                <div className="flex items-center gap-3">
-                  <Ruler className="w-5 h-5 text-blue-600" />
-                  <span className="text-[10px] uppercase tracking-widest font-medium">
-                    Custom Fitting
+              <div className="flex flex-wrap gap-10 mt-14 pt-10 border-t border-slate-100">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center">
+                    <Ruler className="w-5 h-5 text-primary/40" />
+                  </div>
+                  <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-400">
+                    Precision Fitting
                   </span>
                 </div>
-                <div className="flex items-center gap-3">
-                  <Truck className="w-5 h-5 text-amber-600" />
-                  <span className="text-[10px] uppercase tracking-widest font-medium">
-                    Private Delivery
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center">
+                    <Truck className="w-5 h-5 text-primary/40" />
+                  </div>
+                  <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-400">
+                    Secure Logistics
                   </span>
                 </div>
               </div>

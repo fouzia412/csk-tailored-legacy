@@ -21,13 +21,16 @@ import {
   outfitOptions,
   viewOptions,
   outfitImageAssets,
+  shirtVariations,
   type MaterialItem,
   type OutfitType,
   type ViewType,
+  type ShirtVariation,
 } from "@/data/CustomizeMaterials";
 import { Navigate, useNavigate, useLocation } from "react-router-dom";
 import suitingBanner from "@/assets/suiting.jpg";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 const Customize = () => {
   const location = useLocation();
@@ -39,6 +42,7 @@ const Customize = () => {
   const [selectedMaterialId, setSelectedMaterialId] =
     useState("suit-navy-stripe");
   const [selectedView, setSelectedView] = useState<ViewType>("front");
+  const [selectedShirtVariation, setSelectedShirtVariation] = useState<ShirtVariation>("Shirt (Full Hands)");
   const [zoom, setZoom] = useState(1);
   const [search, setSearch] = useState("");
   const GOOGLE_SCRIPT_URL_2 =
@@ -254,8 +258,13 @@ const Customize = () => {
   };
 
   const getCurrentAssets = () => {
-    const outfitAssets = outfitImageAssets[selectedOutfit];
+    const outfitAssets: any = outfitImageAssets[selectedOutfit];
     if (!outfitAssets) return null;
+
+    if (selectedOutfit === "Shirt") {
+      const variationAssets = outfitAssets[selectedShirtVariation];
+      return variationAssets?.[selectedView] || variationAssets?.front || null;
+    }
 
     return outfitAssets[selectedView] || outfitAssets.front || null;
   };
@@ -366,29 +375,44 @@ const Customize = () => {
     if (loading) return;
     setLoading(true);
 
-    const payload = new FormData();
-
-    payload.append("name", formData.name);
-    payload.append("email", formData.email);
-    payload.append("phone", formData.phone);
-    payload.append("message", formData.message);
-    payload.append("product", selectedMaterial?.name || "");
-    payload.append("outfit", selectedOutfit);
-
-    // 🔥 IMPORTANT (you missed this)
-    payload.append("type", "customize");
 
     try {
-      await fetch(GOOGLE_SCRIPT_URL_2, {
+      const API_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
+
+      // 1. Send to CMS Backend
+      const res = await fetch(`${API_URL}/inquiries`, {
         method: "POST",
-        body: payload,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...formData,
+          type: "customize",
+          productCategory: selectedOutfit.toLowerCase(),
+          productName: `Custom ${selectedOutfit}${selectedOutfit === "Shirt" ? ` (${selectedShirtVariation})` : ""}: ${selectedMaterial?.name}`
+        })
       });
 
-      toast.success("Customization request sent!");
-      setFormData({ name: "", email: "", phone: "", message: "" });
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to submit");
+      // 2. Backup to Google Script
+      const payload = new FormData();
+      payload.append("name", formData.name);
+      payload.append("email", formData.email);
+      payload.append("phone", formData.phone);
+      payload.append("message", formData.message);
+      payload.append("product", selectedMaterial?.name || "");
+      payload.append("outfit", selectedOutfit);
+      if (selectedOutfit === "Shirt") payload.append("variation", selectedShirtVariation);
+      payload.append("type", "customize");
+
+      fetch(GOOGLE_SCRIPT_URL_2, {
+        method: "POST",
+        body: payload,
+      }).catch(console.error);
+
+      if (res.ok) {
+        toast.success("Customization request received");
+        setFormData({ name: "", email: "", phone: "", message: "" });
+      } else {
+        throw new Error("Backend failed");
+      }
     } finally {
       setLoading(false);
     }
@@ -472,6 +496,33 @@ const Customize = () => {
                   </button>
                 ))}
               </div>
+
+              {selectedOutfit === "Shirt" && (
+                <div className="mb-5 space-y-3">
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">
+                    Shirt Variation
+                  </p>
+                  <div className="grid grid-cols-1 gap-2">
+                    {shirtVariations.map((v) => (
+                      <button
+                        key={v}
+                        onClick={() => setSelectedShirtVariation(v)}
+                        className={cn(
+                          "flex items-center justify-between px-5 py-3 rounded-xl border text-xs font-bold transition-all",
+                          selectedShirtVariation === v
+                            ? "border-[#111827] bg-[#111827] text-white"
+                            : "border-[#D1D5DB] bg-white text-[#374151] hover:bg-[#F9FAFB]"
+                        )}
+                      >
+                        {v}
+                        {selectedShirtVariation === v && (
+                          <Sparkles className="w-3.5 h-3.5" />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div className="grid max-h-[calc(100vh-80px)] grid-cols-2 gap-4 overflow-y-auto pr-1 lg:grid-cols-3">
                 {filteredMaterials.map((item) => (
@@ -610,21 +661,21 @@ const Customize = () => {
 
                 <div className="flex justify-between text-sm">
                   <span className="text-[#6B7280]">Outfit</span>
-                  <span className="font-medium text-[#111827]">
-                    {selectedOutfit}
-                  </span>
+                  <span className="font-medium text-[#111827]">{selectedOutfit}</span>
                 </div>
+                {selectedOutfit === "Shirt" && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-[#6B7280]">Style</span>
+                    <span className="font-medium text-[#111827]">{selectedShirtVariation}</span>
+                  </div>
+                )}
                 <div className="flex justify-between text-sm">
                   <span className="text-[#6B7280]">Material</span>
-                  <span className="font-medium text-[#111827]">
-                    {selectedMaterial?.name}
-                  </span>
+                  <span className="font-medium text-[#111827]">{selectedMaterial?.name}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-[#6B7280]">View</span>
-                  <span className="font-medium capitalize text-[#111827]">
-                    {selectedView}
-                  </span>
+                  <span className="font-medium capitalize text-[#111827]">{selectedView}</span>
                 </div>
               </div>
 

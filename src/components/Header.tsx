@@ -10,10 +10,13 @@ const Header = () => {
 
   const navLinks = [
     { name: "Home", path: "/" },
+    { name: "Kurta Pyjama", path: "/collections/kurta-pyjama" },
     { name: "Suiting", path: "/collections/suiting" },
     { name: "Shirting", path: "/collections/shirting" },
     { name: "Wedding", path: "/collections/wedding" },
+    { name: "Ready To Wear", path: "/collections/ready-to-wear" },
     { name: "About", path: "/about" },
+    { name: "Careers", path: "/careers" },
     { name: "Our Store", path: "/gallery" },
     { name: "Contact", path: "/contact" },
   ];

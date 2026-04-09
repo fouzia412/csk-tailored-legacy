@@ -49,23 +49,40 @@ export default function Contact() {
       contactSchema.parse(formData);
       setErrors({});
 
+      const API_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
+
+      // 1. Send to CMS Backend
+      const res = await fetch(`${API_URL}/inquiries`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...formData,
+          type: "contact",
+          productCategory: "general"
+        })
+      });
+
+      // 2. Backup to Google Script (Optional, but keeping for resilience)
       const payload = new FormData();
       payload.append("name", formData.name);
       payload.append("phone", formData.phone);
       payload.append("message", formData.message);
-      payload.append("type", "contact"); // 🔥 required for routing
+      payload.append("type", "contact");
 
-      await fetch(GOOGLE_SCRIPT_URL_3, {
+      fetch(GOOGLE_SCRIPT_URL_3, {
         method: "POST",
         body: payload,
-      });
+      }).catch(console.error);
 
-      toast({
-        title: "Success",
-        description: "Your enquiry has been submitted",
-      });
-
-      setFormData({ name: "", phone: "", message: "" });
+      if (res.ok) {
+        toast({
+          title: "Inquiry Received",
+          description: "Our master tailors will contact you shortly.",
+        });
+        setFormData({ name: "", phone: "", message: "" });
+      } else {
+        throw new Error("Backend failed");
+      }
     } catch (err) {
       if (err instanceof z.ZodError) {
         const fieldErrors: Record<string, string> = {};

@@ -3,6 +3,7 @@ import { customizeShirtMaterials } from './customizeShirtMaterials';
 import { customizeWeddingMaterials } from './customizeWeddingMaterials';
 
 export type OutfitType = "Suit" | "Shirt" | "Wedding outfit";
+export type ShirtVariation = "Shirt (Full Hands)" | "Shirt (Half Hands)" | "Mandarin Full Hands" | "Mandarin Half Hands";
 export type ViewType = "front" | "left" | "right";
 
 export type FabricPattern =
@@ -38,6 +39,7 @@ export type MaterialItem = {
 };
 
 export const outfitOptions: OutfitType[] = ["Suit", "Shirt", "Wedding outfit"];
+export const shirtVariations: ShirtVariation[] = ["Shirt (Full Hands)", "Shirt (Half Hands)", "Mandarin Full Hands", "Mandarin Half Hands"];
 export const viewOptions: ViewType[] = ["front", "left", "right"];
 export const outfitImageAssets = {
     Suit: {
@@ -58,20 +60,73 @@ export const outfitImageAssets = {
         },
     },
     Shirt: {
-        front: {
-            base: "/customize/shirt/front.png",
-            mask: "/customize/shirt/front-mask.png",
-            detail: "/customize/shirt/front-detail.png",
+        "Shirt (Full Hands)": {
+            front: {
+                base: "/customize/shirt/full-hands/front.png",
+                mask: "/customize/shirt/full-hands/front-mask.png",
+                detail: "/customize/shirt/full-hands/front-detail.png",
+            },
+            left: {
+                base: "/customize/shirt/full-hands/left.png",
+                mask: "/customize/shirt/full-hands/left-mask.png",
+                detail: "/customize/shirt/full-hands/left-detail.png",
+            },
+            right: {
+                base: "/customize/shirt/full-hands/right.png",
+                mask: "/customize/shirt/full-hands/right-mask.png",
+                detail: "/customize/shirt/full-hands/right-detail.png",
+            },
         },
-        left: {
-            base: "/customize/shirt/left.png",
-            mask: "/customize/shirt/left-mask.png",
-            detail: "/customize/shirt/left-detail.png",
+        "Shirt (Half Hands)": {
+            front: {
+                base: "/customize/shirt/half-hands/front.png",
+                mask: "/customize/shirt/half-hands/front-mask.png",
+                detail: "/customize/shirt/half-hands/front-detail.png",
+            },
+            left: {
+                base: "/customize/shirt/half-hands/left.png",
+                mask: "/customize/shirt/half-hands/left-mask.png",
+                detail: "/customize/shirt/half-hands/left-detail.png",
+            },
+            right: {
+                base: "/customize/shirt/half-hands/right.png",
+                mask: "/customize/shirt/half-hands/right-mask.png",
+                detail: "/customize/shirt/half-hands/right-detail.png",
+            },
         },
-        right: {
-            base: "/customize/shirt/right.png",
-            mask: "/customize/shirt/right-mask.png",
-            detail: "/customize/shirt/right-detail.png",
+        "Mandarin Full Hands": {
+            front: {
+                base: "/customize/shirt/mandarin-full/front.png",
+                mask: "/customize/shirt/mandarin-full/front-mask.png",
+                detail: "/customize/shirt/mandarin-full/front-detail.png",
+            },
+            left: {
+                base: "/customize/shirt/mandarin-full/left.png",
+                mask: "/customize/shirt/mandarin-full/left-mask.png",
+                detail: "/customize/shirt/mandarin-full/left-detail.png",
+            },
+            right: {
+                base: "/customize/shirt/mandarin-full/right.png",
+                mask: "/customize/shirt/mandarin-full/right-mask.png",
+                detail: "/customize/shirt/mandarin-full/right-detail.png",
+            },
+        },
+        "Mandarin Half Hands": {
+            front: {
+                base: "/customize/shirt/mandarin-half/front.png",
+                mask: "/customize/shirt/mandarin-half/front-mask.png",
+                detail: "/customize/shirt/mandarin-half/front-detail.png",
+            },
+            left: {
+                base: "/customize/shirt/mandarin-half/left.png",
+                mask: "/customize/shirt/mandarin-half/left-mask.png",
+                detail: "/customize/shirt/mandarin-half/left-detail.png",
+            },
+            right: {
+                base: "/customize/shirt/mandarin-half/right.png",
+                mask: "/customize/shirt/mandarin-half/right-mask.png",
+                detail: "/customize/shirt/mandarin-half/right-detail.png",
+            },
         },
     },
     "Wedding outfit": {
