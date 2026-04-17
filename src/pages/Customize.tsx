@@ -75,8 +75,6 @@ const Customize = () => {
     ]);
   }, [shirts, suits, wedding, shirtLoad, suitLoad, weddingLoad]);
 
-  console.log(customizeMaterials);
-
   const filteredMaterials = useMemo(() => {
     return customizeMaterials.filter((item) => {
       const matchOutfit = item.outfit === selectedOutfit;
@@ -595,7 +593,7 @@ const Customize = () => {
 
                   <input
                     name="phone"
-                    type="tel"
+                    type="number"
                     value={formData.phone}
                     onChange={handleChange}
                     placeholder="Mobile Number"

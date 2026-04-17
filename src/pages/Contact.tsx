@@ -33,6 +33,7 @@ export default function Contact() {
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
+    email: "",
     message: "",
   });
 
@@ -52,6 +53,7 @@ export default function Contact() {
       const payload = new URLSearchParams();
       payload.append("name", formData.name);
       payload.append("phone", formData.phone);
+      payload.append("email", formData.email);
       payload.append("message", formData.message);
       payload.append("type", "contact");
 
@@ -86,6 +88,7 @@ export default function Contact() {
         name: "",
         phone: "",
         message: "",
+        email: "",
       });
     } catch (err) {
       if (err instanceof z.ZodError) {
@@ -228,6 +231,8 @@ export default function Contact() {
                     <Input
                       name="phone"
                       placeholder="Phone Number"
+                      type="number"
+                      maxLength={10}
                       value={formData.phone}
                       onChange={(e) => {
                         setFormData({ ...formData, phone: e.target.value });
@@ -241,6 +246,28 @@ export default function Contact() {
                     />
                     {errors.phone && (
                       <p className="text-xs text-red-500">{errors.phone}</p>
+                    )}
+                  </div>
+
+                  {/* Email  */}
+                  <div className="space-y-1">
+                    <Input
+                      name="email"
+                      type="email"
+                      placeholder="Email Id"
+                      value={formData.email}
+                      onChange={(e) => {
+                        setFormData({ ...formData, email: e.target.value });
+                        if (errors.email) setErrors({ ...errors, email: "" });
+                      }}
+                      className={`h-12 rounded-xl ${
+                        errors.email
+                          ? "border-red-500 focus-visible:ring-red-500"
+                          : ""
+                      }`}
+                    />
+                    {errors.email && (
+                      <p className="text-xs text-red-500">{errors.email}</p>
                     )}
                   </div>
 
@@ -299,7 +326,7 @@ export default function Contact() {
         </section>
 
         {/* CTA STRIP */}
-        <section className="bg-black text-white py-12 text-center">
+        <section className="bg-primary text-white py-12 text-center">
           <h3 className="text-2xl md:text-3xl font-semibold">
             Need Help Choosing Fabric?
           </h3>

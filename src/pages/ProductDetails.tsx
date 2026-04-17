@@ -95,6 +95,7 @@ const ProductDetails = () => {
         body: JSON.stringify({
           name: formValues.get("name"),
           phone: formValues.get("phone"),
+          email: formValues.get("email"),
           message: formValues.get("message"),
           type: "product",
           productCategory: product?.category || "general",
@@ -109,6 +110,7 @@ const ProductDetails = () => {
 
       payload.append("name", formValues.get("name") as string);
       payload.append("phone", formValues.get("phone") as string);
+      payload.append("email", formValues.get("email") as string);
       payload.append("message", formValues.get("message") as string);
       payload.append("type", "product");
       payload.append("product", product?.name || "");
@@ -141,7 +143,7 @@ const ProductDetails = () => {
 
       <main className="flex-grow">
         {/* Product Hero Banner */}
-        <section className="relative h-[40vh] overflow-hidden bg-black">
+        <section className="relative h-[60vh] overflow-hidden bg-black">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.6 }}
@@ -387,8 +389,25 @@ const ProductDetails = () => {
                       <Input
                         id="phone"
                         name="phone"
-                        type="tel"
+                        type="number"
                         placeholder="Mobile Number"
+                        required
+                        maxLength={10}
+                        className="bg-white border-slate-100 h-12 rounded-xl focus:ring-primary/5 focus:border-primary transition-all font-medium"
+                      />
+                    </div>
+                    <div className="space-y-2.5">
+                      <Label
+                        htmlFor="phone"
+                        className="text-[10px] uppercase tracking-widest font-black text-slate-400 ml-1"
+                      >
+                        Email
+                      </Label>
+                      <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        placeholder="email"
                         required
                         className="bg-white border-slate-100 h-12 rounded-xl focus:ring-primary/5 focus:border-primary transition-all font-medium"
                       />
