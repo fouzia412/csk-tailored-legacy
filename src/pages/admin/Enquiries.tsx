@@ -1,27 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import {
-  LayoutDashboard,
-  ShoppingBag,
-  Settings,
-  LogOut,
   Search,
-  Bell,
-  Menu,
-  X,
   Package,
   Trash2,
-  ChevronRight,
   Mail,
   User,
   Phone,
   Clock,
-  MessageSquare,
   Loader2,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { cn } from "@/lib/utils";
@@ -32,21 +20,14 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { DeleteConfirmDialog } from "@/components/DeleteConfirmDialog";
+import axios from "axios";
 
 const AdminEnquiries = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  // const [enquiries, setEnquiries] = useState<any[]>([]);
-  // const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("All");
-  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [deleteId, setDeleteId] = useState(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const query = useQueryClient();
-
-  const token = localStorage.getItem("admin_token");
-  const API_URL =
-    import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
 
   const categories = [
     "All",
@@ -58,46 +39,15 @@ const AdminEnquiries = () => {
     "ready-to-wear",
   ];
 
-  useEffect(() => {
-    if (!token) {
-      navigate("/admin/login");
-      return;
-    }
-
-    // const fetchEnquiries = async () => {
-    //   try {
-    //     setIsLoading(true);
-    //     const res = await fetch(`${API_URL}/inquiries`, {
-    //       headers: { Authorization: `Bearer ${token}` },
-    //     });
-    //     const data = await res.json();
-
-    //     if (Array.isArray(data)) {
-    //       setEnquiries(data);
-    //     } else {
-    //       setEnquiries([]);
-    //       console.error("Inquiries data is not an array:", data);
-    //     }
-    //   } catch (error) {
-    //     toast.error("Failed to fetch enquiries");
-    //   } finally {
-    //     setIsLoading(false);
-    //   }
-    // };
-
-    // fetchEnquiries();
-  }, [navigate, token, API_URL]);
-
   const { data: enquiries = [], isLoading } = useQuery({
     queryKey: ["enquiries", search],
     queryFn: async () => {
-      const res = await fetch(
-        `${API_URL}/inquiries?search=${encodeURIComponent(search)}`,
+      const { data } = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}/inquiries?search=${encodeURIComponent(search)}`,
         {
-          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,
         },
       );
-      const data = await res.json();
       return data || [];
     },
     placeholderData: keepPreviousData,
@@ -112,11 +62,13 @@ const AdminEnquiries = () => {
   const deleteMutation = useMutation({
     mutationFn: async () => {
       if (!deleteId) return;
-      const res = await fetch(`${API_URL}/inquiries/${deleteId}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      return res.json();
+      const res = await axios.delete(
+        `${import.meta.env.VITE_API_BASE_URL}/inquiries/${deleteId}`,
+        {
+          withCredentials: true,
+        },
+      );
+      return res.data;
     },
     onSuccess: () => {
       query.invalidateQueries({ queryKey: ["enquiries"] });
@@ -131,21 +83,17 @@ const AdminEnquiries = () => {
     },
   });
 
-  const handleLogout = () => {
-    localStorage.removeItem("admin_token");
-    toast.success("Logged out successfully");
-    navigate("/admin/login");
-  };
-
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="animate-spin h-6 w-6" />
-      </div>
+      <AdminLayout>
+        <div className="min-h-screen flex items-center justify-center">
+          <Loader2 className="animate-spin h-6 w-6" />
+        </div>
+      </AdminLayout>
     );
   }
 
-  const filteredEnquiries = enquiries.filter((e) => {
+  const filteredEnquiries = enquiries?.filter((e) => {
     if (activeTab === "All") return true;
     if (activeTab === "General") return e.type === "contact";
     return e.productCategory?.toLowerCase() === activeTab.toLowerCase();
@@ -252,7 +200,7 @@ const AdminEnquiries = () => {
                       </div>
                       {enquiry.name}
                     </h3>
-                    <div className="space-y-3">
+                    <div className="space-y-3 font-sans">
                       <div className="flex items-center text-xs font-medium text-black/60">
                         <Mail
                           className="w-4 h-4 mr-3 text-black/40"
@@ -280,7 +228,7 @@ const AdminEnquiries = () => {
                           />
                           Subject of Interest
                         </div>
-                        <p className=" text-sm text-black truncate">
+                        <p className="text-sm text-black truncate">
                           {enquiry.productName}
                         </p>
                       </div>

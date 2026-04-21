@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { getImageUrl } from "@/api/config";
 import AdminLayout from "@/components/admin/AdminLayout";
+import axios from "axios";
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState<any>(null);
@@ -22,31 +23,24 @@ const AdminDashboard = () => {
 
   const navigate = useNavigate();
 
-  const token = localStorage.getItem("admin_token");
-  const API_URL =
-    import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
-
   useEffect(() => {
-    if (!token) {
-      navigate("/admin/login");
-      return;
-    }
-
     const fetchDashboardData = async () => {
       try {
         setIsLoading(true);
 
-        const statsRes = await fetch(`${API_URL}/products/stats`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const { data: statsData } = await axios.get(
+          `${import.meta.env.VITE_API_BASE_URL}/products/stats`,
+          {
+            withCredentials: true,
+          },
+        );
 
-        const statsData = await statsRes.json();
-
-        const productsRes = await fetch(`${API_URL}/products`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        const productsData = await productsRes.json();
+        const { data: productsData } = await axios.get(
+          `${import.meta.env.VITE_API_BASE_URL}/products`,
+          {
+            withCredentials: true,
+          },
+        );
 
         setStats([
           {
@@ -88,7 +82,7 @@ const AdminDashboard = () => {
     };
 
     fetchDashboardData();
-  }, [navigate, token, API_URL]);
+  }, []);
 
   return (
     <AdminLayout>
@@ -188,7 +182,7 @@ const AdminDashboard = () => {
                   {products.map((product) => (
                     <tr
                       key={product.id}
-                      className="transition hover:bg-[#FAFAFA] group"
+                      className="transition hover:bg-[#FAFAFA] group font-sans"
                     >
                       <td className="px-6 py-3">
                         <div className="flex items-center gap-4">

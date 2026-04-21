@@ -6,6 +6,7 @@ import {
   ChevronLeft,
   Grip,
   Mail,
+  Users,
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
@@ -20,18 +21,24 @@ import {
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/AuthProvider";
+import { DeleteConfirmDialog } from "../DeleteConfirmDialog";
+import { useState } from "react";
 
 const menuItems = [
   { title: "Executive Summary", icon: Grip, path: "/admin/dashboard" },
   { title: "Master Collection", icon: ShoppingBag, path: "/admin/products" },
   { title: "Fabric Archives", icon: Package, path: "/admin/fabrics" },
   { title: "Enquiries", icon: Mail, path: "/admin/enquiries" },
-  { title: "Human Capital", icon: Briefcase, path: "/admin/careers" },
+  { title: "Recruitments", icon: Briefcase, path: "/admin/careers" },
+  { title: "User Management", icon: Users, path: "/admin/user-management" },
 ];
 
 export default function AdminSidebar() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { logout } = useAuth();
+  const [isOpen, setIsOpen] = useState(false);
 
   const { state, toggleSidebar, isMobile, openMobile, setOpenMobile } =
     useSidebar();
@@ -47,13 +54,14 @@ export default function AdminSidebar() {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("admin_token");
+  const handleLogout = async () => {
+    await logout();
     navigate("/admin/login");
 
     if (isMobile && openMobile) {
       setOpenMobile(false);
     }
+    setIsOpen(false);
   };
 
   return (
@@ -65,7 +73,7 @@ export default function AdminSidebar() {
       <SidebarHeader
         className={cn(
           "border-b border-[#EAEAEA] transition-all duration-300",
-          collapsed ? "px-2 py-5" : "px-5 py-7",
+          collapsed ? "px-2 py-5" : "px-5 py-5",
         )}
       >
         <div
@@ -81,17 +89,18 @@ export default function AdminSidebar() {
               collapsed ? "justify-center" : "gap-4",
             )}
           >
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-black text-lg font-bold italic text-white shadow-xl">
-              C
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center ">
+              <img
+                src="/favicon.ico"
+                alt="CSK Tailored Logo"
+                className="h-full w-full object-contain p-1"
+              />
             </div>
 
             {!collapsed && (
-              <div className="flex flex-col">
-                <span className="text-[15px] font-semibold tracking-tight">
-                  CSK Tailored
-                </span>
+              <div className="flex flex-col leading-tight">
                 <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-black/40">
-                  Admin Console
+                  Admin Panel
                 </span>
               </div>
             )}
@@ -159,7 +168,7 @@ export default function AdminSidebar() {
       <SidebarFooter className="mt-auto border-t border-[#EAEAEA] p-3">
         <SidebarMenuButton
           tooltip={collapsed ? "Logout" : undefined}
-          onClick={handleLogout}
+          onClick={() => setIsOpen(true)}
           className={cn(
             "w-full rounded-xl border border-red-500/10 bg-red-50 text-red-600 transition-all duration-300 hover:bg-red-100",
             collapsed ? "h-12 px-0 justify-center" : "h-12 px-4 justify-start",
@@ -172,6 +181,15 @@ export default function AdminSidebar() {
           )}
         </SidebarMenuButton>
       </SidebarFooter>
+
+      <DeleteConfirmDialog
+        title="Confirm Logout"
+        description="Are you sure you want to logout?"
+        open={isOpen}
+        onOpenChange={setIsOpen}
+        onConfirm={handleLogout}
+        buttonTxt="logout"
+      />
     </Sidebar>
   );
 }

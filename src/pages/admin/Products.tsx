@@ -21,19 +21,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import axios from "axios";
 
 const AdminProducts = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  // const [products, setProducts] = useState<any[]>([]);
-  // const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("All");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  // const [isSubmitting, setIsSubmitting] = useState(false);
   const [mode, setMode] = useState<"create" | "edit">("create");
   const [search, setSearch] = useState("");
   const queryClient = useQueryClient();
 
-  // Form State
   const [formData, setFormData] = useState({
     name: "",
     category: "suiting",
@@ -46,9 +43,6 @@ const AdminProducts = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
   const navigate = useNavigate();
-  const token = localStorage.getItem("admin_token");
-  const API_URL =
-    import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
 
   const tabs = [
     "All",
@@ -59,13 +53,8 @@ const AdminProducts = () => {
     "ready-to-wear",
   ];
 
-  const {
-    data: products = [],
-    isLoading,
-    isFetching,
-  } = useQuery({
+  const { data: products = [], isLoading } = useQuery({
     queryKey: ["products", activeTab, search],
-    enabled: !!token,
     queryFn: async () => {
       const params = new URLSearchParams();
 
@@ -77,44 +66,17 @@ const AdminProducts = () => {
         params.append("search", search.trim());
       }
 
-      const res = await fetch(`${API_URL}/products?${params.toString()}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}/products?${params.toString()}`,
+        {
+          withCredentials: true,
         },
-      });
+      );
 
-      if (res.status === 401) {
-        handleLogout();
-        throw new Error("Unauthorized");
-      }
-
-      if (!res.ok) {
-        throw new Error("Failed to fetch products");
-      }
-
-      return res.json();
+      return res.data || [];
     },
     placeholderData: keepPreviousData,
   });
-
-  useEffect(() => {
-    if (!token) {
-      navigate("/admin/login");
-    }
-  }, [token, navigate]);
-
-  // useEffect(() => {
-  //   if (!token) {
-  //     navigate("/admin/login");
-  //     return;
-  //   }
-
-  //   const delayDebounce = setTimeout(() => {
-  //     fetchProducts(activeTab, search);
-  //   }, 400);
-
-  //   return () => clearTimeout(delayDebounce);
-  // }, [activeTab, search, token]);
 
   useEffect(() => {
     if (selectedProduct && isAddModalOpen) {
@@ -131,39 +93,6 @@ const AdminProducts = () => {
       resetForm();
     }
   }, [selectedProduct, isAddModalOpen]);
-
-  const fetchProducts = async (
-    categoryParam = activeTab,
-    searchParam = search,
-  ) => {
-    try {
-      // setIsLoading(true);
-      const params = new URLSearchParams();
-
-      if (categoryParam && categoryParam !== "All") {
-        params.append("category", categoryParam.toLowerCase());
-      }
-
-      if (searchParam.trim()) {
-        params.append("search", searchParam.trim());
-      }
-
-      const res = await fetch(`${API_URL}/products?${params.toString()}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (res.status === 401) {
-        handleLogout();
-        return;
-      }
-
-      const data = await res.json();
-      // setProducts(data);
-    } catch (error) {
-      toast.error("Failed to fetch products");
-    }
-  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -184,45 +113,46 @@ const AdminProducts = () => {
     mutationFn: async () => {
       let imageUrls = [...formData.image];
 
-      if (selectedFiles.length > 0) {
-        const uploadedImages = [];
+      try {
+        if (selectedFiles.length > 0) {
+          const uploadedImages = [];
 
-        for (const file of selectedFiles) {
-          const uploadData = new FormData();
-          uploadData.append("image", file);
+          for (const file of selectedFiles) {
+            const uploadData = new FormData();
+            uploadData.append("image", file);
 
-          const uploadRes = await fetch(`${API_URL}/upload`, {
-            method: "POST",
-            headers: { Authorization: `Bearer ${token}` },
-            body: uploadData,
-          });
+            const uploadRes = await axios.post(
+              `${import.meta.env.VITE_API_BASE_URL}/upload`,
+              uploadData,
+              {
+                withCredentials: true,
+              },
+            );
 
-          if (!uploadRes.ok) throw new Error("Upload failed");
+            const path = uploadRes.data;
+            uploadedImages.push(path);
+          }
 
-          const path = await uploadRes.text();
-          uploadedImages.push(path);
+          imageUrls = uploadedImages;
         }
-
-        imageUrls = uploadedImages;
+      } catch (error) {
+        toast.error("Failed to upload images");
       }
 
       // 2. Create Product
-      const productRes = await fetch(`${API_URL}/products`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+      const productRes = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/products`,
+        {
+          ...formData,
+          price: Number(formData.price),
+          image: imageUrls,
         },
-        body: JSON.stringify({ ...formData, image: imageUrls }),
-      });
+        {
+          withCredentials: true,
+        },
+      );
 
-      if (productRes.status === 401) {
-        toast.error("Session expired. Please log in again.");
-        handleLogout();
-        return;
-      }
-
-      return await productRes.json();
+      return (await productRes.data) || [];
     },
     onSuccess: () => {
       toast.success("Signature piece added to collection");
@@ -243,44 +173,45 @@ const AdminProducts = () => {
 
       let imageUrls = [...formData.image];
 
-      if (selectedFiles.length > 0) {
-        const uploadedImages = [];
+      try {
+        if (selectedFiles.length > 0) {
+          const uploadedImages = [];
 
-        for (const file of selectedFiles) {
-          const uploadData = new FormData();
-          uploadData.append("image", file);
+          for (const file of selectedFiles) {
+            const uploadData = new FormData();
+            uploadData.append("image", file);
 
-          const uploadRes = await fetch(`${API_URL}/upload`, {
-            method: "POST",
-            headers: { Authorization: `Bearer ${token}` },
-            body: uploadData,
-          });
+            const uploadRes = await axios.post(
+              `${import.meta.env.VITE_API_BASE_URL}/upload`,
+              uploadData,
+              {
+                withCredentials: true,
+              },
+            );
 
-          if (!uploadRes.ok) throw new Error("Upload failed");
+            const path = uploadRes.data;
+            uploadedImages.push(path);
+          }
 
-          const path = await uploadRes.text();
-          uploadedImages.push(path);
+          imageUrls = uploadedImages;
         }
-
-        imageUrls = uploadedImages;
+      } catch (error) {
+        toast.error("Failed to upload images");
       }
 
-      const res = await fetch(`${API_URL}/products/${selectedProduct.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
+      const res = await axios.put(
+        `${import.meta.env.VITE_API_BASE_URL}/products/${selectedProduct.id}`,
+        {
           ...formData,
           price: Number(formData.price),
           image: imageUrls,
-        }),
-      });
+        },
+        {
+          withCredentials: true,
+        },
+      );
 
-      if (!res.ok) throw new Error("Update failed");
-
-      return res.json();
+      return res.data || [];
     },
 
     onSuccess: () => {
@@ -317,18 +248,14 @@ const AdminProducts = () => {
     if (!confirm("Are you sure you want to delete this product?")) return;
 
     try {
-      const res = await fetch(`${API_URL}/products/${id}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.delete(
+        `${import.meta.env.VITE_API_BASE_URL}/products/${id}`,
+        {
+          withCredentials: true,
+        },
+      );
 
-      if (res.status === 401) {
-        toast.error("Session expired. Please log in again.");
-        handleLogout();
-        return;
-      }
-
-      if (res.ok) {
+      if (res.status === 200) {
         toast.success("Product deleted successfully");
 
         queryClient.invalidateQueries({
@@ -341,18 +268,6 @@ const AdminProducts = () => {
       toast.error("Error deleting product");
     }
   };
-
-  const handleLogout = () => {
-    localStorage.removeItem("admin_token");
-    toast.success("Logged out successfully");
-    navigate("/admin/login");
-  };
-
-  // const filteredProducts = products.filter(
-  //   (p) =>
-  //     activeTab === "All" ||
-  //     p.category.toLowerCase() === activeTab.toLowerCase(),
-  // );
 
   return (
     <AdminLayout>
@@ -440,7 +355,7 @@ const AdminProducts = () => {
                 products.map((product) => (
                   <tr
                     key={product.id}
-                    className="group hover:bg-[#FAFAFA] transition-colors"
+                    className="group hover:bg-[#FAFAFA] transition-colors font-sans"
                   >
                     <td className="px-6 py-4">
                       <div className="flex items-center space-x-4">

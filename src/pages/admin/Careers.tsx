@@ -35,22 +35,17 @@ import { cn } from "@/lib/utils";
 import { Job, JobApplication } from "@/hooks/useJobs";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { getImageUrl } from "@/api/config";
+import axios from "axios";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const AdminCareers = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [activeTab, setActiveTab] = useState("opportunities"); // 'opportunities' or 'submissions'
-  const [jobs, setJobs] = useState<Job[]>([]);
-  const [applications, setApplications] = useState<JobApplication[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("opportunities");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [editingJob, setEditingJob] = useState<Job | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
 
-  const navigate = useNavigate();
-  const token = localStorage.getItem("admin_token");
-  const API_URL =
-    import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
+  const client = useQueryClient();
 
   // Form State for new Job
   const [jobFormData, setJobFormData] = useState({
@@ -63,13 +58,33 @@ const AdminCareers = () => {
     type: "Full-time",
   });
 
-  useEffect(() => {
-    if (!token) {
-      navigate("/admin/login");
-      return;
-    }
-    fetchData();
-  }, [token, navigate]);
+  const { data: applications = [], isLoading: isApplicationsLoading } =
+    useQuery({
+      queryKey: ["applications"],
+      queryFn: async () => {
+        const { data } = await axios.get(
+          `${import.meta.env.VITE_API_BASE_URL}/jobs/applications`,
+          {
+            withCredentials: true,
+          },
+        );
+        return data;
+      },
+    });
+
+  const { data: jobs = [], isLoading: isJobsLoading } = useQuery({
+    queryKey: ["jobs"],
+    queryFn: async () => {
+      const { data } = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}/jobs/admin`,
+        {
+          withCredentials: true,
+        },
+      );
+      return data;
+    },
+  });
+
   useEffect(() => {
     if (isAddModalOpen) {
       document.body.style.overflow = "hidden";
@@ -81,28 +96,6 @@ const AdminCareers = () => {
       document.body.style.overflow = "auto";
     };
   }, [isAddModalOpen]);
-  const fetchData = async () => {
-    try {
-      setIsLoading(true);
-      const [jobsRes, appsRes] = await Promise.all([
-        fetch(`${API_URL}/jobs/admin`, {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-        fetch(`${API_URL}/jobs/applications`, {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-      ]);
-
-      if (jobsRes.ok && appsRes.ok) {
-        setJobs(await jobsRes.json());
-        setApplications(await appsRes.json());
-      }
-    } catch (error) {
-      toast.error("Failed to fetch recruitment data");
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleCreateJob = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -110,21 +103,19 @@ const AdminCareers = () => {
 
     try {
       const url = isEditMode
-        ? `${API_URL}/jobs/${editingJob?.id}`
-        : `${API_URL}/jobs`;
+        ? `${import.meta.env.VITE_API_BASE_URL}/jobs/${editingJob?.id}`
+        : `${import.meta.env.VITE_API_BASE_URL}/jobs`;
 
       const method = isEditMode ? "PUT" : "POST";
 
-      const res = await fetch(url, {
+      const res = await axios.request({
         method,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(jobFormData),
+        url,
+        withCredentials: true,
+        data: JSON.stringify(jobFormData),
       });
 
-      if (res.ok) {
+      if (res.status === 200 || res.status === 201) {
         toast.success(
           isEditMode ? "Job updated successfully" : "Job listing published",
         );
@@ -133,7 +124,7 @@ const AdminCareers = () => {
         setIsEditMode(false);
         setEditingJob(null);
 
-        fetchData();
+        client.invalidateQueries({ queryKey: ["jobs"] });
 
         setJobFormData({
           title: "",
@@ -162,13 +153,15 @@ const AdminCareers = () => {
     )
       return;
     try {
-      const res = await fetch(`${API_URL}/jobs/${id}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (res.ok) {
+      const res = await axios.delete(
+        `${import.meta.env.VITE_API_BASE_URL}/jobs/${id}`,
+        {
+          withCredentials: true,
+        },
+      );
+      if (res.status === 200) {
         toast.success("Job removed from systems");
-        fetchData();
+        client.invalidateQueries({ queryKey: ["jobs"] });
       }
     } catch (error) {
       toast.error("Deletion failed");
@@ -189,11 +182,6 @@ const AdminCareers = () => {
       location: job.location,
       type: job.type,
     });
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("admin_token");
-    navigate("/admin/login");
   };
 
   return (
@@ -265,7 +253,7 @@ const AdminCareers = () => {
             exit={{ opacity: 0, y: -10 }}
             className="grid grid-cols-1 lg:grid-cols-2 gap-4"
           >
-            {isLoading ? (
+            {isJobsLoading ? (
               Array(4)
                 .fill(0)
                 .map((_, i) => (
@@ -363,7 +351,10 @@ const AdminCareers = () => {
                 />
               </div>
               <div className="text-[12px] md:text-[14px] font-bold uppercase tracking-[0.2em] text-black/40">
-                {applications.length} Submissions
+                <span className="text-black font-sans">
+                  {applications.length}
+                </span>{" "}
+                Submissions
               </div>
             </div>
 
@@ -378,7 +369,7 @@ const AdminCareers = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#EAEAEA]">
-                  {isLoading ? (
+                  {isApplicationsLoading ? (
                     Array(3)
                       .fill(0)
                       .map((_, i) => (
@@ -392,7 +383,7 @@ const AdminCareers = () => {
                     applications.map((app) => (
                       <tr
                         key={app.id}
-                        className="group hover:bg-[#FAFAFA] transition-colors"
+                        className="group hover:bg-[#FAFAFA] transition-colors font-sans"
                       >
                         <td className="px-6 py-4">
                           <div className="flex items-center space-x-4">
