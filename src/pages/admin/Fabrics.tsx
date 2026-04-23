@@ -289,14 +289,14 @@ const AdminFabrics = () => {
               />
 
               <input
-                placeholder="Family"
+                placeholder="Fabric Type"
                 value={form.family}
                 onChange={(e) => setForm({ ...form, family: e.target.value })}
                 className="h-11 px-4 rounded-xl border"
               />
 
               <input
-                placeholder="Sub Label"
+                placeholder="Fabric SubLabel"
                 value={form.subLabel}
                 onChange={(e) => setForm({ ...form, subLabel: e.target.value })}
                 className="h-11 px-4 rounded-xl border"
