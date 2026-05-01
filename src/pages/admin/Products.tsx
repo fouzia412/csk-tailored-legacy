@@ -131,12 +131,17 @@ const AdminProducts = () => {
             const uploadRes = await axios.post(
               `${import.meta.env.VITE_API_BASE_URL}/upload`,
               uploadData,
-              {
-                withCredentials: true,
-              },
+              { withCredentials: true },
             );
 
-            const path = uploadRes.data;
+            console.log("UPLOAD RESPONSE:", uploadRes.data);
+
+            const path =
+              uploadRes.data?.imageUrl ||
+              uploadRes.data?.url ||
+              uploadRes.data?.path ||
+              uploadRes.data;
+
             uploadedImages.push(path);
           }
 
@@ -195,8 +200,14 @@ const AdminProducts = () => {
                 withCredentials: true,
               },
             );
+            console.log("UPLOAD RESPONSE:", uploadRes.data);
 
-            const path = uploadRes.data;
+            const path =
+              uploadRes.data?.imageUrl ||
+              uploadRes.data?.url ||
+              uploadRes.data?.path ||
+              uploadRes.data;
+
             uploadedImages.push(path);
           }
 
