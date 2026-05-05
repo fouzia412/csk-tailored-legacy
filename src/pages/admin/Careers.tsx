@@ -30,6 +30,13 @@ import {
 import { DeleteConfirmDialog } from "@/components/DeleteConfirmDialog";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const AdminCareers = () => {
   const [activeTab, setActiveTab] = useState("opportunities");
@@ -227,16 +234,16 @@ const AdminCareers = () => {
       <div className="mb-10 rounded-[32px] border border-[#87CEEB]/20 bg-gradient-to-br from-white via-[#FFF9F0] to-[#F3F4F6] p-6 shadow-[0_20px_60px_rgba(20,112,169,0.08)] md:p-8 font-sans">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div>
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#87CEEB]/20 bg-[#87CEEB]/10 px-4 py-2 text-[12px] md:text-[14px] font-bold uppercase tracking-[0.25em] text-[#1470A9]">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#87CEEB]/20 bg-[#87CEEB]/10 px-4 py-2 text-[8px] md:text-[12px] font-bold uppercase tracking-[0.25em] text-[#1470A9]">
               <Briefcase className="h-3.5 w-3.5" />
               Talent Acquisition
             </div>
 
-            <h2 className="text-3xl font-semibold tracking-tight text-[#0F172A] md:text-4xl">
+            <h2 className="text-xl font-semibold tracking-tight text-[#0F172A] md:text-2xl">
               Recruitment Suite
             </h2>
 
-            <p className="mt-2 max-w-xl text-[14px] md:text-[18px] leading-relaxed text-slate-500">
+            <p className="mt-2 max-w-xl text-[12px] md:text-[16px] leading-relaxed text-slate-500">
               Manage openings, applications, and premium hiring workflows in one
               place.
             </p>
@@ -323,8 +330,8 @@ const AdminCareers = () => {
                 >
                   <div className="flex flex-col h-full justify-between gap-6">
                     <div>
-                      <div className="flex items-center justify-between mb-4">
-                        <span className="rounded-full border border-[#87CEEB]/20 bg-[#87CEEB]/10 px-3 py-2 text-[12px] md:text-[14px] font-bold uppercase tracking-[0.2em] text-[#1470A9]">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="rounded-full border border-[#87CEEB]/20 bg-[#87CEEB]/10 px-2 py-1 text-[12px] md:text-[14px] font-bold uppercase tracking-[0.2em] text-[#1470A9]">
                           {job.category}
                         </span>
                         <span
@@ -338,10 +345,10 @@ const AdminCareers = () => {
                           {job.status}
                         </span>
                       </div>
-                      <h4 className="mb-4 text-[22px] md:text-[30px] font-semibold tracking-tight text-[#0F172A] line-clamp-1">
+                      <h4 className="mb-4 text-xl md:text-2xl font-semibold tracking-tight text-[#0F172A] line-clamp-1">
                         {job.title}
                       </h4>
-                      <div className="flex flex-wrap items-center gap-4 text-[14px] md:text-[18px] font-semibold text-black/60 tracking-wide">
+                      <div className="flex flex-wrap items-center gap-4 text-[14px] md:text-[16px] font-semibold text-black/60 tracking-wide">
                         <span className="flex items-center gap-1.5">
                           <MapPin className="w-3.5 h-3.5" /> {job.location}
                         </span>
@@ -358,7 +365,7 @@ const AdminCareers = () => {
                         </span>
                       </div>
                     </div>
-                    <div className="flex items-center justify-end gap-2 pt-4 border-t border-[#EAEAEA]">
+                    <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#EAEAEA]">
                       <button
                         onClick={() => {
                           setDeletingJobId(job.id);
@@ -527,7 +534,8 @@ const AdminCareers = () => {
               className="fixed inset-y-0 right-0 z-50 w-full max-w-2xl overflow-hidden font-sans"
             >
               <div className="flex h-full flex-col bg-gradient-to-br from-[#FFF9F0] via-white to-[#F3F4F6] shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
-                <div className="relative overflow-hidden border-b border-[#87CEEB]/20 bg-gradient-to-r from-[#1470A9] via-[#5882A5] to-[#0F172A] px-8 py-8">
+                {/* Premium Header */}
+                <div className="relative overflow-hidden border-b border-[#87CEEB]/20 bg-gradient-to-r from-[#1470A9] via-[#5882A5] to-[#0F172A] px-8 py-8 md:py-10">
                   <div className="absolute inset-0 opacity-20">
                     <div className="absolute right-0 top-0 h-52 w-52 rounded-full bg-[#87CEEB] blur-3xl" />
                     <div className="absolute bottom-0 left-0 h-44 w-44 rounded-full bg-[#EF7D05] blur-3xl" />
@@ -535,16 +543,16 @@ const AdminCareers = () => {
 
                   <div className="relative flex items-start justify-between gap-4">
                     <div>
-                      <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[12px] md:text-[14px] font-bold uppercase tracking-[0.25em] text-white/80 backdrop-blur-sm">
+                      <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-white/90 backdrop-blur-sm">
                         <Briefcase className="h-3.5 w-3.5" />
                         Recruitment Form
                       </div>
 
-                      <h3 className="text-[28px] md:text-[40px] font-semibold tracking-tight text-white">
+                      <h3 className="text-xl md:text-2xl font-semibold tracking-tight text-white">
                         {isEditMode ? "Edit Position" : "Create New Position"}
                       </h3>
 
-                      <p className="mt-2 text-[14px] md:text-[18px] text-white/70">
+                      <p className="mt-1.5 text-sm md:text-base text-white/70 font-light">
                         Add premium job details and attract the best candidates.
                       </p>
                     </div>
@@ -557,34 +565,33 @@ const AdminCareers = () => {
                         setIsEditMode(false);
                         setEditingJob(null);
                       }}
-                      className="h-12 w-12 rounded-2xl border border-white/10 bg-white/10 text-white backdrop-blur-sm hover:bg-white/20"
+                      className="h-10 w-10 rounded-full border border-white/10 bg-white/10 text-white backdrop-blur-sm hover:bg-white/20 transition-colors"
                     >
-                      <X className="h-5 w-5" />
+                      <X className="h-4 w-4" />
                     </Button>
                   </div>
                 </div>
 
-                {/* Scrollable Body - FIX APPLIED HERE 👇 */}
+                {/* Scrollable Body */}
                 <div
                   className="flex-1 overflow-y-auto overscroll-contain min-h-0 touch-pan-y"
                   onWheel={(e) => e.stopPropagation()}
                   onTouchMove={(e) => e.stopPropagation()}
                 >
-                  {/* I moved your padding to this inner div so your scrollbar flushes nicely to the absolute right edge! */}
-                  <div className="px-6 py-6 sm:px-8">
+                  <div className="px-6 py-8 sm:px-10">
                     <form
                       onSubmit={handleCreateJob}
-                      className="space-y-6 pb-10"
+                      className="space-y-7 pb-10"
                     >
                       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                        <div className="space-y-2">
-                          <Label className="text-[12px] md:text-[14px] font-bold uppercase tracking-[0.25em] text-[#0F172A]/70">
+                        <div className="space-y-1.5">
+                          <Label className="text-xs font-semibold uppercase tracking-wider text-[#0F172A]/70">
                             Role Title
                           </Label>
                           <Input
                             placeholder="e.g. Master Tailor"
                             required
-                            className="h-12 rounded-xl border border-[#87CEEB]/30 bg-white px-5 text-[14px] md:text-[18px] shadow-none focus:border-[#1470A9] focus:ring-0"
+                            className="h-11 rounded-lg border border-gray-200/80 bg-white/50 px-4 text-sm md:text-base text-gray-800 shadow-sm transition-all focus:border-[#1470A9] focus:bg-white focus:ring-1 focus:ring-[#1470A9]/20"
                             value={jobFormData.title}
                             onChange={(e) =>
                               setJobFormData({
@@ -595,37 +602,47 @@ const AdminCareers = () => {
                           />
                         </div>
 
-                        <div className="space-y-2">
-                          <Label className="text-[12px] md:text-[14px] font-bold uppercase tracking-[0.25em] text-[#0F172A]/70">
+                        <div className="space-y-1.5">
+                          <Label className="text-xs font-semibold uppercase tracking-wider text-[#0F172A]/70">
                             Classification
                           </Label>
-                          <select
-                            className="w-full h-12 rounded-xl border border-[#87CEEB]/30 bg-white px-5 text-[14px] md:text-[18px] font-medium shadow-none focus:border-[#1470A9] focus:ring-0"
+                          <Select
                             value={jobFormData.category}
-                            onChange={(e) =>
+                            onValueChange={(value) =>
                               setJobFormData({
                                 ...jobFormData,
-                                category: e.target.value,
+                                category: value,
                               })
                             }
                           >
-                            <option value="Production">
-                              Production & Tailoring
-                            </option>
-                            <option value="Retail">Retail & Store</option>
-                            <option value="Design">Fashion Design</option>
-                            <option value="Operations">Operations</option>
-                          </select>
+                            <SelectTrigger className="h-11 w-full rounded-lg border border-gray-200/80 bg-white/50 px-4 text-sm md:text-base text-gray-800 shadow-sm transition-all focus:border-[#1470A9] focus:bg-white focus:ring-1 focus:ring-[#1470A9]/20">
+                              <SelectValue placeholder="Select classification" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Production">
+                                Production & Tailoring
+                              </SelectItem>
+                              <SelectItem value="Retail">
+                                Retail & Store
+                              </SelectItem>
+                              <SelectItem value="Design">
+                                Fashion Design
+                              </SelectItem>
+                              <SelectItem value="Operations">
+                                Operations
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
                         </div>
 
-                        <div className="space-y-2">
-                          <Label className="text-[12px] md:text-[14px] font-bold uppercase tracking-[0.25em] text-[#0F172A]/70">
+                        <div className="space-y-1.5">
+                          <Label className="text-xs font-semibold uppercase tracking-wider text-[#0F172A]/70">
                             Location
                           </Label>
                           <Input
                             placeholder="City, HQ"
                             required
-                            className="h-12 rounded-xl border border-[#87CEEB]/30 bg-white font-body px-5 text-[14px] md:text-[18px] shadow-none focus:border-[#1470A9] focus:ring-0"
+                            className="h-11 rounded-lg border border-gray-200/80 bg-white/50 px-4 text-sm md:text-base text-gray-800 shadow-sm transition-all focus:border-[#1470A9] focus:bg-white focus:ring-1 focus:ring-[#1470A9]/20"
                             value={jobFormData.location}
                             onChange={(e) =>
                               setJobFormData({
@@ -636,40 +653,47 @@ const AdminCareers = () => {
                           />
                         </div>
 
-                        <div className="space-y-2">
-                          <Label className="text-[12px] md:text-[14px] font-bold uppercase tracking-[0.25em] text-[#0F172A]/70">
+                        <div className="space-y-1.5">
+                          <Label className="text-xs font-semibold uppercase tracking-wider text-[#0F172A]/70">
                             Employment Type
                           </Label>
-
-                          <select
-                            className="w-full h-12 rounded-xl border border-[#87CEEB]/30 bg-white px-5 text-[14px] md:text-[18px] font-medium shadow-none focus:border-[#1470A9] focus:ring-0"
+                          <Select
                             value={jobFormData.type}
-                            onChange={(e) =>
-                              setJobFormData({
-                                ...jobFormData,
-                                type: e.target.value,
-                              })
+                            onValueChange={(value) =>
+                              setJobFormData({ ...jobFormData, type: value })
                             }
                             required
                           >
-                            <option value="">Select Type</option>
-                            <option value="Full-time">Full-time</option>
-                            <option value="Part-time">Part-time</option>
-                            <option value="Contract">Contract</option>
-                            <option value="Internship">Internship</option>
-                            <option value="Freelance">Freelance</option>
-                            <option value="Remote">Remote</option>
-                          </select>
+                            <SelectTrigger className="h-11 w-full rounded-lg border border-gray-200/80 bg-white/50 px-4 text-sm md:text-base text-gray-800 shadow-sm transition-all focus:border-[#1470A9] focus:bg-white focus:ring-1 focus:ring-[#1470A9]/20">
+                              <SelectValue placeholder="Select Type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Full-time">
+                                Full-time
+                              </SelectItem>
+                              <SelectItem value="Part-time">
+                                Part-time
+                              </SelectItem>
+                              <SelectItem value="Contract">Contract</SelectItem>
+                              <SelectItem value="Internship">
+                                Internship
+                              </SelectItem>
+                              <SelectItem value="Freelance">
+                                Freelance
+                              </SelectItem>
+                              <SelectItem value="Remote">Remote</SelectItem>
+                            </SelectContent>
+                          </Select>
                         </div>
 
-                        <div className="space-y-2">
-                          <Label className="text-[12px] md:text-[14px] font-bold uppercase tracking-[0.25em] text-[#0F172A]/70">
+                        <div className="space-y-1.5 md:col-span-2">
+                          <Label className="text-xs font-semibold uppercase tracking-wider text-[#0F172A]/70">
                             Package
                           </Label>
                           <Input
                             placeholder="e.g. 5L - 8L PA"
                             required
-                            className="h-12 rounded-xl border border-[#87CEEB]/30 bg-white px-5 text-[14px] md:text-[18px] shadow-none focus:border-[#1470A9] focus:ring-0"
+                            className="h-11 rounded-lg border border-gray-200/80 bg-white/50 px-4 text-sm md:text-base text-gray-800 shadow-sm transition-all focus:border-[#1470A9] focus:bg-white focus:ring-1 focus:ring-[#1470A9]/20"
                             value={jobFormData.package}
                             onChange={(e) =>
                               setJobFormData({
@@ -681,14 +705,14 @@ const AdminCareers = () => {
                         </div>
                       </div>
 
-                      <div className="space-y-2">
-                        <Label className="text-[12px] md:text-[14px] font-bold uppercase tracking-[0.25em] text-[#0F172A]/70">
+                      <div className="space-y-1.5">
+                        <Label className="text-xs font-semibold uppercase tracking-wider text-[#0F172A]/70">
                           Role Overview
                         </Label>
                         <Textarea
                           placeholder="Narrate the responsibilities..."
                           required
-                          className="min-h-[120px] rounded-xl border border-[#87CEEB]/30 bg-white px-5 py-4 text-[14px] md:text-[18px] shadow-none focus:border-[#1470A9] focus:ring-0 resize-none"
+                          className="min-h-[100px] resize-none rounded-lg border border-gray-200/80 bg-white/50 px-4 py-3 text-sm md:text-base text-gray-800 shadow-sm transition-all focus:border-[#1470A9] focus:bg-white focus:ring-1 focus:ring-[#1470A9]/20"
                           value={jobFormData.description}
                           onChange={(e) =>
                             setJobFormData({
@@ -699,14 +723,14 @@ const AdminCareers = () => {
                         />
                       </div>
 
-                      <div className="space-y-2">
-                        <Label className="text-[12px] md:text-[14px] font-bold uppercase tracking-[0.25em] text-[#0F172A]/70">
+                      <div className="space-y-1.5">
+                        <Label className="text-xs font-semibold uppercase tracking-wider text-[#0F172A]/70">
                           Requirements
                         </Label>
                         <Textarea
                           placeholder="Key qualifications (one per line)..."
                           required
-                          className="min-h-[120px] rounded-xl border border-[#87CEEB]/30 bg-white px-5 py-4 text-[14px] md:text-[18px] shadow-none focus:border-[#1470A9] focus:ring-0 resize-none"
+                          className="min-h-[100px] resize-none rounded-lg border border-gray-200/80 bg-white/50 px-4 py-3 text-sm md:text-base text-gray-800 shadow-sm transition-all focus:border-[#1470A9] focus:bg-white focus:ring-1 focus:ring-[#1470A9]/20"
                           value={jobFormData.requirements}
                           onChange={(e) =>
                             setJobFormData({
@@ -717,24 +741,26 @@ const AdminCareers = () => {
                         />
                       </div>
 
-                      <div className="pt-4">
+                      <div className="pt-2">
                         <Button
                           type="submit"
                           disabled={isSubmitting}
-                          className="group relative h-14 w-full overflow-hidden rounded-2xl bg-gradient-to-r from-[#1470A9] to-[#0F172A] font-bold uppercase tracking-[0.25em] text-[14px] md:text-[18px] text-white shadow-lg transition-all hover:shadow-[0_10px_30px_rgba(20,112,169,0.4)]"
+                          className="group relative h-12 w-full overflow-hidden rounded-lg bg-gradient-to-r from-[#1470A9] to-[#0F172A] text-sm md:text-base font-semibold uppercase tracking-widest text-white shadow-md transition-all hover:shadow-[0_8px_25px_rgba(20,112,169,0.3)]"
                         >
-                          <div className="absolute inset-0 bg-gradient-to-r from-[#0F172A] to-[#1470A9] opacity-0 transition-opacity group-hover:opacity-100" />
+                          <div className="absolute inset-0 bg-gradient-to-r from-[#0F172A] to-[#1470A9] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
-                          {isSubmitting ? (
-                            <>
-                              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                              Saving...
-                            </>
-                          ) : isEditMode ? (
-                            "Update Position"
-                          ) : (
-                            "Publish Position"
-                          )}
+                          <span className="relative flex items-center justify-center">
+                            {isSubmitting ? (
+                              <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Saving...
+                              </>
+                            ) : isEditMode ? (
+                              "Update Position"
+                            ) : (
+                              "Publish Position"
+                            )}
+                          </span>
                         </Button>
                       </div>
                     </form>
