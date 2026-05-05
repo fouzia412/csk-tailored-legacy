@@ -1,3 +1,4 @@
+// csk-textile-frontend\src\pages\admin\Products.tsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Plus, Search, X, Trash2, Edit2, Upload } from "lucide-react";
@@ -458,11 +459,14 @@ const AdminProducts = () => {
             </DialogTitle>
           </DialogHeader>
 
-          {/* Body */}
-          <div className="flex-1 overflow-y-auto px-8 py-6">
+          {/* Body - FIX APPLIED HERE 👇 */}
+          <div
+            className="flex-1 overflow-y-auto px-8 py-6"
+            onWheel={(e) => e.stopPropagation()}
+            onTouchMove={(e) => e.stopPropagation()}
+          >
             <form onSubmit={handleCreateProduct} className="space-y-6">
               {/* Image Upload */}
-
               <div className="space-y-2">
                 <Label className="text-[10px] uppercase tracking-[0.15em] font-semibold text-black/60">
                   Product Images

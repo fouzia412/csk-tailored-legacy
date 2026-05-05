@@ -179,12 +179,18 @@ const Careers = () => {
         <section className="container mx-auto px-4 py-14">
           <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-4 md:p-6 mb-10 sticky top-4 z-20">
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-amber-400" />
               <Input
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search by title, category, or location"
-                className="h-14 rounded-2xl border-black  pl-12 text-black  placeholder:text-slate-500"
+                className="h-14  pl-12   rounded-2xl
+                            border border-slate-200
+                            bg-slate-50
+                            text-slate-900
+                            focus:bg-white
+                            focus:outline-none focus:ring-2 focus:ring-amber-400/50 focus:border-amber-400
+                            placeholder:text-slate-700"
               />
             </div>
           </div>
@@ -198,75 +204,131 @@ const Careers = () => {
               {filteredJobs.map((job) => (
                 <motion.div
                   key={job.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="group relative overflow-hidden rounded-[2rem] border border-[#eadfcd] bg-white p-7 shadow-[0_10px_40px_rgba(0,0,0,0.05)] hover:shadow-[0_25px_70px_rgba(0,0,0,0.09)] hover:-translate-y-1 transition-all duration-500"
+                  // variants={variants}
+                  whileHover={{ y: -6 }}
+                  className="
+        group
+        relative
+        overflow-hidden
+        rounded-[2rem]
+        border border-[#eadfcd]
+        bg-white
+        p-7
+
+        shadow-[0_10px_40px_rgba(0,0,0,0.05)]
+        transition-all duration-500 ease-out
+
+        hover:shadow-[0_30px_80px_rgba(0,0,0,0.12)]
+        hover:scale-[1.025]
+      "
                 >
-                  {/* Status Badge */}
-                  <div className="flex items-center justify-between mb-5">
-                    <Badge className="rounded-full bg-[#fff7e8] text-[#d49a1f] border border-[#f4d7a1] px-4 py-1 font-medium">
-                      {job.category}
-                    </Badge>
+                  {/* 🌟 Glow */}
+                  <div
+                    className="
+        pointer-events-none
+        absolute inset-0
+        opacity-0
+        transition duration-500
+        group-hover:opacity-100
+        bg-gradient-to-br from-amber-100/40 via-transparent to-yellow-100/30
+      "
+                  />
 
-                    <Badge
-                      className={cn(
-                        "rounded-full px-3 py-1 text-xs font-semibold border",
-                        job.status === "Open"
-                          ? "bg-green-50 text-green-700 border-green-200"
-                          : "bg-red-50 text-red-700 border-red-200",
-                      )}
-                    >
-                      {job.status}
-                    </Badge>
-                  </div>
+                  {/* ✨ Shine sweep */}
+                  <div
+                    className="
+        pointer-events-none
+        absolute -inset-y-10 -left-20 w-40
+        rotate-12
+        bg-white/40
+        blur-xl
+        opacity-0
+        transition-all duration-700
+        group-hover:opacity-100
+        group-hover:left-[120%]
+      "
+                  />
 
-                  {/* Title */}
-                  <h3 className="text-2xl font-bold text-[#111827] leading-snug mb-3 line-clamp-2">
-                    {job.title}
-                  </h3>
+                  <div className="relative z-10">
+                    {/* Status Badge */}
+                    <div className="flex items-center justify-between mb-5">
+                      <Badge className="rounded-full bg-[#fff7e8] text-[#d49a1f] border border-[#f4d7a1] px-4 py-1 font-medium hover:bg-[#d49a1f] hover:text-white transition-all duration-300">
+                        {job.category}
+                      </Badge>
 
-                  {/* Description */}
-                  <p className="text-slate-500 text-sm leading-7 mb-6 line-clamp-3">
-                    {job.description}
-                  </p>
-
-                  {/* Details */}
-                  <div className="space-y-3 text-sm text-slate-600 mb-8">
-                    <div className="flex items-center gap-3">
-                      <MapPin className="w-4 h-4 text-[#d49a1f]" />
-                      <span>{job.location}</span>
+                      <Badge
+                        className={cn(
+                          "rounded-full px-3 py-1 text-xs font-semibold border",
+                          job.status === "Open"
+                            ? "bg-green-50 text-green-700 border-green-200 hover:bg-green-600 hover:text-white transition-all duration-300"
+                            : "bg-red-50 text-red-700 border-red-200 hover:bg-red-600 hover:text-white transition-all duration-300",
+                        )}
+                      >
+                        {job.status}
+                      </Badge>
                     </div>
 
-                    <div className="flex items-center gap-3">
-                      <IndianRupee className="w-4 h-4 text-[#d49a1f]" />
-                      <span>{job.package} LPA</span>
+                    {/* Title */}
+                    <h3 className="text-2xl font-bold text-[#111827] leading-snug mb-3 line-clamp-2 group-hover:text-amber-600 transition">
+                      {job.title}
+                    </h3>
+
+                    {/* Description */}
+                    <p className="text-slate-500 text-sm leading-7 mb-6 line-clamp-3">
+                      {job.description}
+                    </p>
+
+                    {/* Details */}
+                    <div className="space-y-3 text-sm text-slate-600 mb-4 font-display">
+                      <div className="flex items-center gap-3 group-hover:translate-x-1 transition">
+                        <MapPin className="w-4 h-4 text-[#d49a1f]" />
+                        <span>{job.location}</span>
+                      </div>
+
+                      <div className="flex items-center gap-3 group-hover:translate-x-1 transition">
+                        <IndianRupee className="w-4 h-4 text-[#d49a1f]" />
+                        <span>{job.package} LPA</span>
+                      </div>
+
+                      <div className="flex items-center gap-3 group-hover:translate-x-1 transition">
+                        <Briefcase className="w-4 h-4 text-[#d49a1f]" />
+                        <span>{job.type}</span>
+                      </div>
                     </div>
 
-                    <div className="flex items-center gap-3">
-                      <Briefcase className="w-4 h-4 text-[#d49a1f]" />
-                      <span>{job.type}</span>
+                    {/* Footer */}
+                    <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+                      <span className="text-xs font-display text-slate-400">
+                        Posted{" "}
+                        {new Date(job.createdAt).toLocaleDateString("en-IN", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </span>
+
+                      <Button
+                        onClick={() => setSelectedJob(job)}
+                        className="
+              rounded-xl
+              bg-[#f4b400]
+              text-black
+              font-semibold
+              px-5
+
+              transition-all duration-300
+
+              hover:bg-[#e8ab00]
+              hover:scale-105
+              hover:shadow-lg
+
+              active:scale-95
+            "
+                      >
+                        View
+                        <ChevronRight className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" />
+                      </Button>
                     </div>
-                  </div>
-
-                  {/* Footer */}
-                  <div className="flex items-center justify-between pt-4 border-t border-slate-100">
-                    <span className="text-xs text-slate-400">
-                      Posted{" "}
-                      {new Date(job.createdAt).toLocaleDateString("en-IN", {
-                        day: "2-digit",
-                        month: "short",
-                        year: "numeric",
-                      })}
-                    </span>
-
-                    <Button
-                      onClick={() => setSelectedJob(job)}
-                      className="rounded-xl bg-[#f4b400] text-black hover:bg-[#e8ab00] font-semibold px-5"
-                    >
-                      View
-                      <ChevronRight className="w-4 h-4 ml-1" />
-                    </Button>
                   </div>
                 </motion.div>
               ))}
@@ -287,7 +349,7 @@ const Careers = () => {
                 setSelectedJob(null);
                 setIsApplying(false);
               }}
-              className="absolute inset-0 bg-black/80 backdrop-blur-md"
+              className="absolute inset-0 bg-black/40 backdrop-blur-sm"
             />
 
             {/* Modal */}
@@ -295,22 +357,26 @@ const Careers = () => {
               initial={{ opacity: 0, scale: 0.97, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.97, y: 20 }}
+              onWheel={(e) => e.stopPropagation()}
+              onTouchMove={(e) => e.stopPropagation()}
               className="
-          relative
-          z-10
-          w-full
-          max-w-6xl
-          max-h-[94vh]
-          overflow-y-auto
-          rounded-[2rem]
-          border border-white/10
-          bg-slate-950
-          shadow-[0_30px_100px_rgba(0,0,0,0.45)]
-        "
+                relative
+                z-10
+                w-full
+                max-w-5xl
+                max-h-[94vh]
+                overflow-y-auto
+                overscroll-contain
+                touch-pan-y
+                rounded-[2rem_0_0_2rem]
+                border border-slate-100
+                bg-white
+                shadow-[0_20px_60px_rgba(0,0,0,0.08)]
+              "
             >
               {/* Sticky Header */}
-              <div className="sticky top-0 z-20 flex items-center justify-between border-b border-white/10 bg-slate-950/90 px-5 sm:px-8 py-4 backdrop-blur-xl">
-                <Badge className="bg-amber-400/10 text-amber-300 border border-amber-400/20">
+              <div className="sticky top-0 z-20 flex items-center justify-between border-b border-[#0D1933] bg-white/95 px-5 sm:px-8 py-4 backdrop-blur-xl">
+                <Badge className="bg-amber-50 text-amber-600 border border-amber-200 hover:bg-amber-100">
                   {selectedJob.category}
                 </Badge>
 
@@ -321,20 +387,22 @@ const Careers = () => {
                     setSelectedJob(null);
                     setIsApplying(false);
                   }}
-                  className="rounded-full text-white hover:bg-white/10"
+                  className="rounded-full text-black hover:bg-[#f5b014] hover:text-white hover:cursor-pointer hover:rotate-[90deg] transition-all duration-300 ease-in-out"
                 >
                   <X className="w-5 h-5" />
                 </Button>
               </div>
 
-              <div className="grid lg:grid-cols-2 text-white">
-                {/* LEFT SIDE */}
-                <div className="p-5 sm:p-8 md:p-10 border-b lg:border-b-0 lg:border-r border-white/10">
-                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white leading-tight mb-8">
+              {/* Improved Alignment: 1.2 fraction for details, 1 fraction for form */}
+              <div className="grid lg:grid-cols-[1.2fr_1fr] text-slate-900">
+                {/* LEFT SIDE (Job Details) */}
+                <div className="p-5 sm:p-8 md:p-10 border-b lg:border-b-0 lg:border-r border-slate-100 bg-white">
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#0D1933] leading-tight mb-8">
                     {selectedJob.title}
                   </h2>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10 font-display">
+                    {/* NOTE: Make sure your InfoCard component internally uses light theme text colors like text-slate-800 instead of text-white */}
                     <InfoCard label="Location" value={selectedJob.location} />
                     <InfoCard label="Package" value={selectedJob.package} />
                     <InfoCard label="Type" value={selectedJob.type} />
@@ -346,6 +414,7 @@ const Careers = () => {
                     />
                   </div>
 
+                  {/* NOTE: Make sure your Section component internally uses light theme text colors too */}
                   <Section
                     title="Job Description"
                     content={selectedJob.description}
@@ -359,15 +428,15 @@ const Careers = () => {
                   </div>
                 </div>
 
-                {/* RIGHT SIDE */}
-                <div className="p-5 sm:p-8 md:p-10 bg-slate-900/40">
+                {/* RIGHT SIDE (Application Form) */}
+                <div className="p-5 sm:p-8 md:p-10 bg-slate-50/50">
                   {!isApplying ? (
-                    <div className="rounded-3xl border border-white/10 bg-white/5 p-6 sm:p-8">
-                      <h3 className="text-2xl font-bold text-white mb-3">
+                    <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
+                      <h3 className="text-2xl font-bold text-slate-900 mb-3">
                         Ready to Apply?
                       </h3>
 
-                      <p className="text-slate-400 mb-6 leading-relaxed">
+                      <p className="text-slate-600 mb-6 leading-relaxed">
                         Submit your application and our team will review it
                         shortly.
                       </p>
@@ -375,14 +444,15 @@ const Careers = () => {
                       <Button
                         onClick={() => setIsApplying(true)}
                         className="
-                    w-full
-                    h-14
-                    rounded-2xl
-                    bg-amber-400
-                    text-slate-950
-                    hover:bg-amber-300
-                    font-semibold
-                  "
+                          w-full
+                          h-14
+                          rounded-2xl
+                          bg-[#f5b014]
+                          text-black
+                          hover:bg-amber-500
+                          font-semibold
+                          shadow-sm
+                        "
                       >
                         Apply Now
                       </Button>
@@ -391,72 +461,80 @@ const Careers = () => {
                     <form
                       onSubmit={handleSubmitApply}
                       className="
-                  rounded-3xl
-                  border
-                  border-white/10
-                  bg-white/5
-                  p-5
-                  sm:p-8
-                  space-y-5
-                "
+                        rounded-3xl
+                        border
+                        border-slate-200
+                        bg-white
+                        p-5
+                        sm:p-8
+                        space-y-5
+                        font-display
+                        shadow-sm
+                      "
                     >
-                      <h3 className="text-2xl font-bold text-white mb-2">
+                      <h3 className="text-2xl font-bold text-slate-900 mb-2">
                         Application Form
                       </h3>
 
+                      {/* NOTE: Check your FormField component to ensure inputs have bg-white, border-slate-200, and text-slate-900 */}
                       <FormField label="Full Name" name="name" />
                       <FormField label="Email" name="email" type="email" />
                       <FormField label="Phone" name="phone" />
 
                       <div>
-                        <Label className="mb-2 block text-slate-300">
+                        <Label className="mb-2 block text-slate-700 font-medium text-sm">
                           Message
                         </Label>
                         <Textarea
                           name="message"
                           className="
-                      min-h-[140px]
-                      rounded-2xl
-                      border-white/10
-                      bg-slate-950
-                      text-white
-                      focus-visible:ring-amber-400
-                    "
+                            min-h-[140px]
+                            rounded-2xl
+                            border border-slate-200
+                            bg-slate-50
+                            px-4 py-3
+                            text-slate-900
+                            focus:bg-white
+                            focus:outline-none focus:ring-2 focus:ring-amber-400/50 focus:border-amber-400
+                            placeholder:text-slate-400
+                          "
+                          placeholder="Tell us why you are a great fit..."
                         />
                       </div>
 
                       <div>
-                        <Label className="mb-2 block text-slate-300">
+                        <Label className="mb-2 block text-slate-700 font-medium text-sm">
                           Resume
                         </Label>
 
                         <label
                           className="
-                      flex
-                      flex-col
-                      items-center
-                      justify-center
-                      gap-3
-                      rounded-2xl
-                      border
-                      border-dashed
-                      border-white/20
-                      bg-slate-950
-                      px-4
-                      py-6
-                      hover:bg-slate-900
-                      transition-colors
-                      cursor-pointer
-                      text-center
-                    "
+                            flex
+                            flex-col
+                            items-center
+                            justify-center
+                            gap-3
+                            rounded-2xl
+                            border
+                            border-dashed
+                            border-slate-300
+                            bg-slate-50
+                            px-4
+                            py-6
+                            hover:bg-slate-100
+                            hover:border-amber-300
+                            transition-colors
+                            cursor-pointer
+                            text-center
+                          "
                         >
                           {resumeFile ? (
-                            <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                            <CheckCircle2 className="w-6 h-6 text-emerald-500" />
                           ) : (
-                            <Upload className="w-5 h-5 text-slate-400" />
+                            <Upload className="w-6 h-6 text-slate-400" />
                           )}
 
-                          <span className="text-sm text-slate-300 break-all">
+                          <span className="text-sm font-medium text-slate-600 break-all">
                             {resumeFile?.name ||
                               "Upload Resume (.pdf, .doc, .docx)"}
                           </span>
@@ -477,14 +555,29 @@ const Careers = () => {
                         type="submit"
                         disabled={handleApplyMutation.isPending}
                         className="
-                    w-full
-                    h-14
-                    rounded-2xl
-                    bg-amber-400
-                    text-slate-950
-                    hover:bg-amber-300
-                    font-semibold
-                  "
+    w-full
+    h-14
+    rounded-2xl
+    bg-[#f5b014]
+    text-black
+    font-semibold
+    shadow-md
+
+    transition-all
+    duration-300
+    ease-out
+
+    hover:bg-amber-500
+    hover:shadow-xl
+    hover:-translate-y-0.5
+    hover:scale-[1.02]
+
+    active:scale-[0.98]
+    active:translate-y-0
+
+    disabled:opacity-60
+    disabled:cursor-not-allowed
+  "
                       >
                         {handleApplyMutation.isPending ? (
                           <Loader2 className="w-5 h-5 animate-spin" />
@@ -506,18 +599,18 @@ const Careers = () => {
 };
 
 const InfoCard = ({ label, value }: { label: string; value: string }) => (
-  <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+  <div className="rounded-2xl border border-slate-300 bg-white/5 p-4">
     <p className="text-xs uppercase tracking-widest text-slate-500 mb-1">
       {label}
     </p>
-    <p className="font-medium text-white">{value}</p>
+    <p className="font-medium text-black">{value}</p>
   </div>
 );
 
 const Section = ({ title, content }: { title: string; content: string }) => (
   <div>
     <h4 className="text-lg font-semibold mb-3">{title}</h4>
-    <p className="text-slate-300 whitespace-pre-line leading-8">{content}</p>
+    <p className="text-[#0D1933] whitespace-pre-line leading-8">{content}</p>
   </div>
 );
 
@@ -525,18 +618,27 @@ const FormField = ({
   label,
   name,
   type = "text",
+  className,
 }: {
   label: string;
   name: string;
+  className?: string;
   type?: string;
 }) => (
   <div>
-    <Label className="mb-2 block text-slate-300">{label}</Label>
+    <Label className="mb-2 block text-[#0D1933]">{label}</Label>
     <Input
       required
       name={name}
       type={type}
-      className="h-12 rounded-2xl border-white/10 bg-slate-950 text-white"
+      className="h-12  rounded-2xl
+                            border border-slate-200
+                            bg-slate-50
+                            px-4 py-3
+                            text-slate-900
+                            focus:bg-white
+                            focus:outline-none focus:ring-2 focus:ring-amber-400/50 focus:border-amber-400
+                            placeholder:text-slate-400"
     />
   </div>
 );
