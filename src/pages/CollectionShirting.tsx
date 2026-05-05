@@ -57,7 +57,7 @@ const CollectionShirting = () => {
               alt="Premium Shirting"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-black/20" />
+            <div className="absolute inset-0 bg-black/40" />
           </motion.div>
 
           <div className="relative h-full container mx-auto px-4 flex flex-col justify-center items-center text-center">
@@ -69,7 +69,7 @@ const CollectionShirting = () => {
               <span className="inline-block px-4 py-1 border border-white/20 rounded-full text-[10px] font-bold tracking-[0.3em] uppercase backdrop-blur-md">
                 Essential Weaves
               </span>
-              <h1 className="text-2xl md:text-5xl font-display font-medium my-4 tracking-tight">
+              <h1 className="text-2xl md:text-6xl font-display font-medium my-4 tracking-tight">
                 Noble <span className="italic font-light">Shirting</span>
               </h1>
               <p className="max-w-xl mx-auto text-lg text-white/60 font-light leading-relaxed">

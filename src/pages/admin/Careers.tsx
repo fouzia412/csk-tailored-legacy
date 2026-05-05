@@ -564,22 +564,136 @@ const AdminCareers = () => {
                   </div>
                 </div>
 
-                <div className="flex-1 overflow-y-auto px-6 py-6 sm:px-8">
-                  <form onSubmit={handleCreateJob} className="space-y-6 pb-10">
-                    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                {/* Scrollable Body - FIX APPLIED HERE 👇 */}
+                <div
+                  className="flex-1 overflow-y-auto overscroll-contain min-h-0 touch-pan-y"
+                  onWheel={(e) => e.stopPropagation()}
+                  onTouchMove={(e) => e.stopPropagation()}
+                >
+                  {/* I moved your padding to this inner div so your scrollbar flushes nicely to the absolute right edge! */}
+                  <div className="px-6 py-6 sm:px-8">
+                    <form
+                      onSubmit={handleCreateJob}
+                      className="space-y-6 pb-10"
+                    >
+                      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                        <div className="space-y-2">
+                          <Label className="text-[12px] md:text-[14px] font-bold uppercase tracking-[0.25em] text-[#0F172A]/70">
+                            Role Title
+                          </Label>
+                          <Input
+                            placeholder="e.g. Master Tailor"
+                            required
+                            className="h-12 rounded-xl border border-[#87CEEB]/30 bg-white px-5 text-[14px] md:text-[18px] shadow-none focus:border-[#1470A9] focus:ring-0"
+                            value={jobFormData.title}
+                            onChange={(e) =>
+                              setJobFormData({
+                                ...jobFormData,
+                                title: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label className="text-[12px] md:text-[14px] font-bold uppercase tracking-[0.25em] text-[#0F172A]/70">
+                            Classification
+                          </Label>
+                          <select
+                            className="w-full h-12 rounded-xl border border-[#87CEEB]/30 bg-white px-5 text-[14px] md:text-[18px] font-medium shadow-none focus:border-[#1470A9] focus:ring-0"
+                            value={jobFormData.category}
+                            onChange={(e) =>
+                              setJobFormData({
+                                ...jobFormData,
+                                category: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="Production">
+                              Production & Tailoring
+                            </option>
+                            <option value="Retail">Retail & Store</option>
+                            <option value="Design">Fashion Design</option>
+                            <option value="Operations">Operations</option>
+                          </select>
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label className="text-[12px] md:text-[14px] font-bold uppercase tracking-[0.25em] text-[#0F172A]/70">
+                            Location
+                          </Label>
+                          <Input
+                            placeholder="City, HQ"
+                            required
+                            className="h-12 rounded-xl border border-[#87CEEB]/30 bg-white font-body px-5 text-[14px] md:text-[18px] shadow-none focus:border-[#1470A9] focus:ring-0"
+                            value={jobFormData.location}
+                            onChange={(e) =>
+                              setJobFormData({
+                                ...jobFormData,
+                                location: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label className="text-[12px] md:text-[14px] font-bold uppercase tracking-[0.25em] text-[#0F172A]/70">
+                            Employment Type
+                          </Label>
+
+                          <select
+                            className="w-full h-12 rounded-xl border border-[#87CEEB]/30 bg-white px-5 text-[14px] md:text-[18px] font-medium shadow-none focus:border-[#1470A9] focus:ring-0"
+                            value={jobFormData.type}
+                            onChange={(e) =>
+                              setJobFormData({
+                                ...jobFormData,
+                                type: e.target.value,
+                              })
+                            }
+                            required
+                          >
+                            <option value="">Select Type</option>
+                            <option value="Full-time">Full-time</option>
+                            <option value="Part-time">Part-time</option>
+                            <option value="Contract">Contract</option>
+                            <option value="Internship">Internship</option>
+                            <option value="Freelance">Freelance</option>
+                            <option value="Remote">Remote</option>
+                          </select>
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label className="text-[12px] md:text-[14px] font-bold uppercase tracking-[0.25em] text-[#0F172A]/70">
+                            Package
+                          </Label>
+                          <Input
+                            placeholder="e.g. 5L - 8L PA"
+                            required
+                            className="h-12 rounded-xl border border-[#87CEEB]/30 bg-white px-5 text-[14px] md:text-[18px] shadow-none focus:border-[#1470A9] focus:ring-0"
+                            value={jobFormData.package}
+                            onChange={(e) =>
+                              setJobFormData({
+                                ...jobFormData,
+                                package: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                      </div>
+
                       <div className="space-y-2">
                         <Label className="text-[12px] md:text-[14px] font-bold uppercase tracking-[0.25em] text-[#0F172A]/70">
-                          Role Title
+                          Role Overview
                         </Label>
-                        <Input
-                          placeholder="e.g. Master Tailor"
+                        <Textarea
+                          placeholder="Narrate the responsibilities..."
                           required
-                          className="h-12 rounded-xl border border-[#87CEEB]/30 bg-white px-5 text-[14px] md:text-[18px] shadow-none focus:border-[#1470A9] focus:ring-0"
-                          value={jobFormData.title}
+                          className="min-h-[120px] rounded-xl border border-[#87CEEB]/30 bg-white px-5 py-4 text-[14px] md:text-[18px] shadow-none focus:border-[#1470A9] focus:ring-0 resize-none"
+                          value={jobFormData.description}
                           onChange={(e) =>
                             setJobFormData({
                               ...jobFormData,
-                              title: e.target.value,
+                              description: e.target.value,
                             })
                           }
                         />
@@ -587,147 +701,44 @@ const AdminCareers = () => {
 
                       <div className="space-y-2">
                         <Label className="text-[12px] md:text-[14px] font-bold uppercase tracking-[0.25em] text-[#0F172A]/70">
-                          Classification
+                          Requirements
                         </Label>
-                        <select
-                          className="w-full h-12 rounded-xl border border-[#87CEEB]/30 bg-white px-5 text-[14px] md:text-[18px] font-medium shadow-none focus:border-[#1470A9] focus:ring-0"
-                          value={jobFormData.category}
+                        <Textarea
+                          placeholder="Key qualifications (one per line)..."
+                          required
+                          className="min-h-[120px] rounded-xl border border-[#87CEEB]/30 bg-white px-5 py-4 text-[14px] md:text-[18px] shadow-none focus:border-[#1470A9] focus:ring-0 resize-none"
+                          value={jobFormData.requirements}
                           onChange={(e) =>
                             setJobFormData({
                               ...jobFormData,
-                              category: e.target.value,
+                              requirements: e.target.value,
                             })
                           }
+                        />
+                      </div>
+
+                      <div className="pt-4">
+                        <Button
+                          type="submit"
+                          disabled={isSubmitting}
+                          className="group relative h-14 w-full overflow-hidden rounded-2xl bg-gradient-to-r from-[#1470A9] to-[#0F172A] font-bold uppercase tracking-[0.25em] text-[14px] md:text-[18px] text-white shadow-lg transition-all hover:shadow-[0_10px_30px_rgba(20,112,169,0.4)]"
                         >
-                          <option value="Production">
-                            Production & Tailoring
-                          </option>
-                          <option value="Retail">Retail & Store</option>
-                          <option value="Design">Fashion Design</option>
-                          <option value="Operations">Operations</option>
-                        </select>
+                          <div className="absolute inset-0 bg-gradient-to-r from-[#0F172A] to-[#1470A9] opacity-0 transition-opacity group-hover:opacity-100" />
+
+                          {isSubmitting ? (
+                            <>
+                              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                              Saving...
+                            </>
+                          ) : isEditMode ? (
+                            "Update Position"
+                          ) : (
+                            "Publish Position"
+                          )}
+                        </Button>
                       </div>
-
-                      <div className="space-y-2">
-                        <Label className="text-[12px] md:text-[14px] font-bold uppercase tracking-[0.25em] text-[#0F172A]/70">
-                          Location
-                        </Label>
-                        <Input
-                          placeholder="City, HQ"
-                          required
-                          className="h-12 rounded-xl border border-[#87CEEB]/30 bg-white font-body px-5 text-[14px] md:text-[18px] shadow-none focus:border-[#1470A9] focus:ring-0"
-                          value={jobFormData.location}
-                          onChange={(e) =>
-                            setJobFormData({
-                              ...jobFormData,
-                              location: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label className="text-[12px] md:text-[14px] font-bold uppercase tracking-[0.25em] text-[#0F172A]/70">
-                          Employment Type
-                        </Label>
-
-                        <select
-                          className="w-full h-12 rounded-xl border border-[#87CEEB]/30 bg-white px-5 text-[14px] md:text-[18px] font-medium shadow-none focus:border-[#1470A9] focus:ring-0"
-                          value={jobFormData.type}
-                          onChange={(e) =>
-                            setJobFormData({
-                              ...jobFormData,
-                              type: e.target.value,
-                            })
-                          }
-                          required
-                        >
-                          <option value="">Select Type</option>
-                          <option value="Full-time">Full-time</option>
-                          <option value="Part-time">Part-time</option>
-                          <option value="Contract">Contract</option>
-                          <option value="Internship">Internship</option>
-                          <option value="Freelance">Freelance</option>
-                          <option value="Remote">Remote</option>
-                        </select>
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label className="text-[12px] md:text-[14px] font-bold uppercase tracking-[0.25em] text-[#0F172A]/70">
-                          Package
-                        </Label>
-                        <Input
-                          placeholder="e.g. 5L - 8L PA"
-                          required
-                          className="h-12 rounded-xl border border-[#87CEEB]/30 bg-white px-5 text-[14px] md:text-[18px] shadow-none focus:border-[#1470A9] focus:ring-0"
-                          value={jobFormData.package}
-                          onChange={(e) =>
-                            setJobFormData({
-                              ...jobFormData,
-                              package: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label className="text-[12px] md:text-[14px] font-bold uppercase tracking-[0.25em] text-[#0F172A]/70">
-                        Role Overview
-                      </Label>
-                      <Textarea
-                        placeholder="Narrate the responsibilities..."
-                        required
-                        className="min-h-[120px] rounded-xl border border-[#87CEEB]/30 bg-white px-5 py-4 text-[14px] md:text-[18px] shadow-none focus:border-[#1470A9] focus:ring-0 resize-none"
-                        value={jobFormData.description}
-                        onChange={(e) =>
-                          setJobFormData({
-                            ...jobFormData,
-                            description: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label className="text-[12px] md:text-[14px] font-bold uppercase tracking-[0.25em] text-[#0F172A]/70">
-                        Requirements
-                      </Label>
-                      <Textarea
-                        placeholder="Key qualifications (one per line)..."
-                        required
-                        className="min-h-[120px] rounded-xl border border-[#87CEEB]/30 bg-white px-5 py-4 text-[14px] md:text-[18px] shadow-none focus:border-[#1470A9] focus:ring-0 resize-none"
-                        value={jobFormData.requirements}
-                        onChange={(e) =>
-                          setJobFormData({
-                            ...jobFormData,
-                            requirements: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-
-                    <div className="pt-4">
-                      <Button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="group relative h-14 w-full overflow-hidden rounded-2xl bg-gradient-to-r from-[#1470A9] to-[#0F172A] font-bold uppercase tracking-[0.25em] text-[14px] md:text-[18px] text-white shadow-lg transition-all hover:shadow-[0_10px_30px_rgba(20,112,169,0.4)]"
-                      >
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#0F172A] to-[#1470A9] opacity-0 transition-opacity group-hover:opacity-100" />
-
-                        {isSubmitting ? (
-                          <>
-                            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                            Saving...
-                          </>
-                        ) : isEditMode ? (
-                          "Update Position"
-                        ) : (
-                          "Publish Position"
-                        )}
-                      </Button>
-                    </div>
-                  </form>
+                    </form>
+                  </div>
                 </div>
               </div>
             </motion.div>
