@@ -317,18 +317,32 @@ const ProductDetails = () => {
                   </p>
                 </div>
                 <div className="col-span-2 pt-4">
+                  {/* Store Availability Notice */}
+                  <div className="flex items-center gap-3 mb-4 px-1">
+                    <div className="w-2 h-2 rounded-full bg-black animate-pulse" />
+
+                    <p className="text-[10px] sm:text-xs uppercase tracking-[0.12em] text-slate-500 font-semibold">
+                      Product availability may vary. Please check with our store
+                      before placing your order.
+                    </p>
+                  </div>
+
                   <Button
                     type="button"
                     variant="outline"
                     onClick={(e) => {
                       e.preventDefault();
+
                       const outfitType =
                         product.category === "suiting"
                           ? "Suit"
                           : product.category === "shirting"
                             ? "Shirt"
                             : "Wedding_outfit";
-                      navigate("/customize", { state: { outfit: outfitType } });
+
+                      navigate("/customize", {
+                        state: { outfit: outfitType },
+                      });
                     }}
                     className="w-full h-14 rounded-2xl border-primary text-primary hover:bg-primary hover:text-white font-bold uppercase tracking-[0.1em] text-[11px] shadow-sm transition-all hover:shadow-lg"
                   >
